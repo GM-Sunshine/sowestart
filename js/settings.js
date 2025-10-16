@@ -1,0 +1,435 @@
+// Settings Panel Management for Sowestart
+
+const settingsManager = {
+    init() {
+        this.attachEventListeners();
+        this.loadSettings();
+    },
+
+    attachEventListeners() {
+        // Modal toggle
+        const settingsIcon = document.getElementById('settings-icon');
+        const closeButton = document.getElementById('close-settings');
+        const modal = document.getElementById('settings-modal');
+        const overlay = modal?.querySelector('.settings-modal-overlay');
+
+        console.log('Settings Manager: Initializing...', { settingsIcon, modal, overlay });
+
+        if (settingsIcon && modal) {
+            settingsIcon.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('Settings icon clicked');
+                modal.classList.toggle('hidden');
+            });
+        }
+
+        if (closeButton && modal) {
+            closeButton.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+        }
+
+        // Close on overlay click
+        if (overlay && modal) {
+            overlay.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+        }
+
+        // Close on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+                modal.classList.add('hidden');
+            }
+        });
+
+        // Tab switching
+        const tabs = document.querySelectorAll('.settings-tab');
+        const tabContents = document.querySelectorAll('.settings-tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.dataset.tab;
+
+                // Update active tab
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                // Update active content
+                tabContents.forEach(content => {
+                    if (content.dataset.content === targetTab) {
+                        content.classList.add('active');
+                    } else {
+                        content.classList.remove('active');
+                    }
+                });
+
+                // Initialize links tab features when links tab is opened
+                if (targetTab === 'links' && typeof linksManager !== 'undefined') {
+                    setTimeout(() => {
+                        linksManager.initPopularSites();
+                        linksManager.initCustomLink();
+                        linksManager.initBookmarkImport();
+                    }, 50);
+                }
+            });
+        });
+
+        // General settings
+        const languageSelect = document.getElementById('language-select');
+        if (languageSelect) {
+            languageSelect.addEventListener('change', (e) => {
+                storage.set('language', e.target.value);
+                i18n.setLanguage(e.target.value);
+            });
+        }
+
+        const greetingNameInput = document.getElementById('greeting-name-input');
+        if (greetingNameInput) {
+            greetingNameInput.addEventListener('input', utils.debounce((e) => {
+                storage.set('userName', e.target.value);
+                const greetingName = document.getElementById('greeting-name');
+                if (greetingName) {
+                    greetingName.textContent = e.target.value || 'Friend';
+                }
+            }, 300));
+        }
+
+        // Appearance settings
+        const themeSelect = document.getElementById('theme-select');
+        if (themeSelect) {
+            themeSelect.addEventListener('change', (e) => {
+                storage.set('theme', e.target.value);
+                this.applyTheme(e.target.value);
+            });
+        }
+
+        const fontSelect = document.getElementById('font-select');
+        if (fontSelect) {
+            fontSelect.addEventListener('change', (e) => {
+                storage.set('font', e.target.value);
+                this.applyFont(e.target.value);
+            });
+        }
+
+        const faviconToggle = document.getElementById('favicon-emoji-toggle');
+        if (faviconToggle) {
+            faviconToggle.addEventListener('change', (e) => {
+                storage.set('useFaviconEmoji', e.target.checked);
+                if (e.target.checked) {
+                    const emoji = storage.get('faviconEmoji');
+                    utils.setFavicon(emoji);
+                } else {
+                    // Reset to default favicon
+                    utils.resetFavicon();
+                }
+            });
+        }
+
+        const emojiInput = document.getElementById('emoji-input');
+        if (emojiInput) {
+            emojiInput.addEventListener('input', utils.debounce((e) => {
+                storage.set('faviconEmoji', e.target.value);
+                if (storage.get('useFaviconEmoji')) {
+                    utils.setFavicon(e.target.value);
+                }
+            }, 300));
+        }
+
+        // Background settings
+        const bgTypeSelect = document.getElementById('background-type');
+        if (bgTypeSelect) {
+            bgTypeSelect.addEventListener('change', (e) => {
+                storage.set('backgroundType', e.target.value);
+                this.toggleBackgroundOptions(e.target.value);
+                backgroundManager.init();
+            });
+        }
+
+        const artSearch = document.getElementById('art-search');
+        if (artSearch) {
+            artSearch.addEventListener('input', utils.debounce((e) => {
+                storage.set('artSearch', e.target.value);
+                if (storage.get('backgroundType') === 'artinstitute') {
+                    backgroundManager.init();
+                }
+            }, 1000));
+        }
+
+        const customBgUrl = document.getElementById('custom-bg-url');
+        if (customBgUrl) {
+            customBgUrl.addEventListener('input', utils.debounce((e) => {
+                storage.set('customBackgroundUrl', e.target.value);
+                if (storage.get('backgroundType') === 'custom') {
+                    backgroundManager.init();
+                }
+            }, 1000));
+        }
+
+        const bgColor = document.getElementById('bg-color');
+        if (bgColor) {
+            bgColor.addEventListener('change', (e) => {
+                storage.set('backgroundColor', e.target.value);
+                if (storage.get('backgroundType') === 'color') {
+                    backgroundManager.init();
+                }
+            });
+        }
+
+        // Clock settings
+        const clockType = document.getElementById('clock-type');
+        if (clockType) {
+            clockType.addEventListener('change', (e) => {
+                storage.set('clockType', e.target.value);
+                clockManager.switchClock(e.target.value);
+            });
+        }
+
+        const showSecondsToggle = document.getElementById('show-seconds-toggle');
+        if (showSecondsToggle) {
+            showSecondsToggle.addEventListener('change', (e) => {
+                storage.set('showSeconds', e.target.checked);
+            });
+        }
+
+        const hour24Toggle = document.getElementById('24hour-toggle');
+        if (hour24Toggle) {
+            hour24Toggle.addEventListener('change', (e) => {
+                storage.set('use24Hour', e.target.checked);
+            });
+        }
+
+        // Weather settings
+        const weatherToggle = document.getElementById('weather-toggle');
+        if (weatherToggle) {
+            weatherToggle.addEventListener('change', (e) => {
+                storage.set('weatherEnabled', e.target.checked);
+                weatherManager.init();
+            });
+        }
+
+        const weatherLocation = document.getElementById('weather-location');
+        if (weatherLocation) {
+            weatherLocation.addEventListener('input', utils.debounce((e) => {
+                storage.set('weatherLocation', e.target.value);
+            }, 500));
+        }
+
+        const weatherUnits = document.getElementById('weather-units');
+        if (weatherUnits) {
+            weatherUnits.addEventListener('change', (e) => {
+                storage.set('weatherUnits', e.target.value);
+                weatherManager.update();
+            });
+        }
+
+        // Search settings
+        const searchEngine = document.getElementById('search-engine');
+        if (searchEngine) {
+            searchEngine.addEventListener('change', (e) => {
+                storage.set('searchEngine', e.target.value);
+                this.toggleCustomSearch(e.target.value);
+            });
+        }
+
+        const customSearchUrl = document.getElementById('custom-search-url');
+        if (customSearchUrl) {
+            customSearchUrl.addEventListener('input', utils.debounce((e) => {
+                storage.set('customSearchUrl', e.target.value);
+            }, 500));
+        }
+
+        // Custom CSS
+        const customCss = document.getElementById('custom-css');
+        if (customCss) {
+            customCss.addEventListener('input', utils.debounce((e) => {
+                storage.set('customCSS', e.target.value);
+                this.applyCustomCSS(e.target.value);
+            }, 1000));
+        }
+
+        // Data management
+        const exportSettings = document.getElementById('export-settings');
+        if (exportSettings) {
+            exportSettings.addEventListener('click', () => {
+                storage.export();
+            });
+        }
+
+        const importSettings = document.getElementById('import-settings');
+        const importFileInput = document.getElementById('import-file-input');
+        if (importSettings && importFileInput) {
+            importSettings.addEventListener('click', () => {
+                importFileInput.click();
+            });
+
+            importFileInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    try {
+                        await storage.import(file);
+                        utils.showToast('Settings imported successfully! Reloading...', 'success', 1500);
+                        setTimeout(() => location.reload(), 1500);
+                    } catch (error) {
+                        utils.showToast('Failed to import settings: ' + error.message, 'error', 4000);
+                    }
+                }
+            });
+        }
+
+        const resetSettings = document.getElementById('reset-settings');
+        if (resetSettings) {
+            resetSettings.addEventListener('click', () => {
+                utils.showConfirm(
+                    'Reset all settings to default? This cannot be undone.',
+                    () => {
+                        storage.reset();
+                        utils.showToast('Settings reset! Reloading...', 'success', 1500);
+                        setTimeout(() => location.reload(), 1500);
+                    }
+                );
+            });
+        }
+    },
+
+    loadSettings() {
+        const settings = storage.getAll();
+
+        // General
+        document.getElementById('language-select').value = settings.language;
+        document.getElementById('greeting-name-input').value = settings.userName;
+
+        // Appearance
+        document.getElementById('theme-select').value = settings.theme;
+        document.getElementById('font-select').value = settings.font;
+        document.getElementById('favicon-emoji-toggle').checked = settings.useFaviconEmoji;
+        document.getElementById('emoji-input').value = settings.faviconEmoji;
+
+        // Background
+        document.getElementById('background-type').value = settings.backgroundType || 'picsum';
+        const customBgUrl = document.getElementById('custom-bg-url');
+        const bgColor = document.getElementById('bg-color');
+        if (customBgUrl) customBgUrl.value = settings.customBackgroundUrl || '';
+        if (bgColor) bgColor.value = settings.backgroundColor || '#1a1a1a';
+        this.toggleBackgroundOptions(settings.backgroundType || 'picsum');
+
+        // Clock
+        document.getElementById('clock-type').value = settings.clockType || 'digital';
+        document.getElementById('show-seconds-toggle').checked = settings.showSeconds || false;
+        document.getElementById('24hour-toggle').checked = settings.use24Hour || false;
+
+        // Weather
+        document.getElementById('weather-toggle').checked = settings.weatherEnabled || false;
+        document.getElementById('weather-location').value = settings.weatherLocation || '';
+        document.getElementById('weather-units').value = settings.weatherUnits || 'metric';
+
+        // Search
+        document.getElementById('search-engine').value = settings.searchEngine;
+        document.getElementById('custom-search-url').value = settings.customSearchUrl;
+        this.toggleCustomSearch(settings.searchEngine);
+
+        // Custom CSS (removed from UI, but keep support for existing users)
+        const customCss = document.getElementById('custom-css');
+        if (customCss && settings.customCSS) {
+            customCss.value = settings.customCSS;
+        }
+
+        // Apply settings
+        this.applyTheme(settings.theme);
+        this.applyFont(settings.font);
+        if (settings.customCSS) {
+            this.applyCustomCSS(settings.customCSS);
+        }
+
+        if (settings.useFaviconEmoji) {
+            utils.setFavicon(settings.faviconEmoji);
+        }
+    },
+
+    toggleBackgroundOptions(type) {
+        const picsumItem = document.getElementById('picsum-item');
+        const pexelsItem = document.getElementById('pexels-item');
+        const artItem = document.getElementById('artinstitute-item');
+        const customItem = document.getElementById('custom-bg-item');
+        const colorItem = document.getElementById('bg-color-item');
+
+        // Hide all
+        picsumItem?.classList.add('hidden');
+        pexelsItem?.classList.add('hidden');
+        artItem?.classList.add('hidden');
+        customItem?.classList.add('hidden');
+        colorItem?.classList.add('hidden');
+
+        // Show relevant option
+        if (type === 'picsum') {
+            picsumItem?.classList.remove('hidden');
+        } else if (type === 'pexels') {
+            pexelsItem?.classList.remove('hidden');
+        } else if (type === 'artinstitute') {
+            artItem?.classList.remove('hidden');
+        } else if (type === 'custom') {
+            customItem?.classList.remove('hidden');
+        } else if (type === 'color') {
+            colorItem?.classList.remove('hidden');
+        }
+    },
+
+    toggleCustomSearch(engine) {
+        const customItem = document.getElementById('custom-search-item');
+        if (engine === 'custom') {
+            customItem.classList.remove('hidden');
+        } else {
+            customItem.classList.add('hidden');
+        }
+    },
+
+    applyTheme(theme) {
+        const html = document.documentElement;
+        const body = document.body;
+
+        if (theme === 'auto') {
+            if (utils.prefersDarkMode()) {
+                html.classList.remove('theme-light');
+                html.classList.add('theme-dark');
+                body.classList.remove('theme-light');
+                body.classList.add('theme-dark');
+            } else {
+                html.classList.remove('theme-dark');
+                html.classList.add('theme-light');
+                body.classList.remove('theme-dark');
+                body.classList.add('theme-light');
+            }
+        } else if (theme === 'dark') {
+            html.classList.remove('theme-light');
+            html.classList.add('theme-dark');
+            body.classList.remove('theme-light');
+            body.classList.add('theme-dark');
+        } else {
+            html.classList.remove('theme-dark');
+            html.classList.add('theme-light');
+            body.classList.remove('theme-dark');
+            body.classList.add('theme-light');
+        }
+    },
+
+    applyFont(font) {
+        if (font === 'system') {
+            document.body.style.fontFamily = '';
+        } else {
+            utils.loadGoogleFont(font);
+            document.body.style.fontFamily = `"${font}", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
+        }
+    },
+
+    applyCustomCSS(css) {
+        let styleElement = document.getElementById('custom-styles');
+
+        if (!styleElement) {
+            styleElement = document.createElement('style');
+            styleElement.id = 'custom-styles';
+            document.head.appendChild(styleElement);
+        }
+
+        styleElement.textContent = css;
+    }
+};

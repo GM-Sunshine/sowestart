@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "So We Start",
+  "version": "1.0.0",
+  "description": "A beautiful new tab page with liquid glass design, quick links, weather, and customizable backgrounds",
+  "permissions": [
+    "storage",
+    "bookmarks"
+  ],
+  "host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;"
+  },
+  "author": "GM Sunshine",
+  "homepage_url": "https://gm-sunshine.com/"
+}

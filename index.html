@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sowestart</title>
+    <link rel="stylesheet" href="css/style.css?v=6.2">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="js/theme-init.js?v=6.2"></script>
+</head>
+<body>
+    <!-- Toast Notification Container -->
+    <div id="toast-container"></div>
+
+    <!-- Dynamic Background -->
+    <div id="background-overlay"></div>
+    <img id="background-image" class="background" alt="">
+
+    <!-- Main Container -->
+    <main id="main-container">
+        <!-- Top Bar -->
+        <header id="top-bar">
+            <button id="settings-icon" class="settings-button glass-container" title="Settings">
+                <div class="glass-filter"></div>
+                <div class="glass-overlay"></div>
+                <div class="glass-specular"></div>
+                <div class="glass-content">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24"/>
+                    </svg>
+                    <span>Settings</span>
+                </div>
+            </button>
+        </header>
+
+        <!-- Clock Section -->
+        <section id="clock-section">
+            <div id="digital-clock" class="clock">
+                <time id="time-display">00:00</time>
+                <div id="date-display">Monday, January 1</div>
+            </div>
+
+            <div id="analog-clock" class="clock hidden">
+                <svg viewBox="0 0 200 200" class="analog-face">
+                    <circle cx="100" cy="100" r="98" fill="none" stroke="currentColor" stroke-width="2" opacity="0.1"/>
+                    <!-- Hour markers -->
+                    <g class="hour-markers">
+                        <line x1="100" y1="10" x2="100" y2="20" stroke="currentColor" stroke-width="2"/>
+                        <line x1="100" y1="10" x2="100" y2="20" stroke="currentColor" stroke-width="2" transform="rotate(30 100 100)"/>
+                        <line x1="100" y1="10" x2="100" y2="20" stroke="currentColor" stroke-width="2" transform="rotate(60 100 100)"/>
+                        <line x1="100" y1="10" x2="100" y2="20" stroke="currentColor" stroke-width="2" transform="rotate(90 100 100)"/>
+                        <line x1="100" y1="10" x2="100" y2="20" stroke="currentColor" stroke-width="2" transform="rotate(120 100 100)"/>
+                        <line x1="100" y1="10" x2="100" y2="20" stroke="currentColor" stroke-width="2" transform="rotate(150 100 100)"/>
+                        <line x1="100" y1="10" x2="100" y2="20" stroke="currentColor" stroke-width="2" transform="rotate(180 100 100)"/>
+                        <line x1="100" y1="10" x2="100" y2="20" stroke="currentColor" stroke-width="2" transform="rotate(210 100 100)"/>
+                        <line x1="100" y1="10" x2="100" y2="20" stroke="currentColor" stroke-width="2" transform="rotate(240 100 100)"/>
+                        <line x1="100" y1="10" x2="100" y2="20" stroke="currentColor" stroke-width="2" transform="rotate(270 100 100)"/>
+                        <line x1="100" y1="10" x2="100" y2="20" stroke="currentColor" stroke-width="2" transform="rotate(300 100 100)"/>
+                        <line x1="100" y1="10" x2="100" y2="20" stroke="currentColor" stroke-width="2" transform="rotate(330 100 100)"/>
+                    </g>
+                    <!-- Clock hands -->
+                    <line id="hour-hand" x1="100" y1="100" x2="100" y2="50" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+                    <line id="minute-hand" x1="100" y1="100" x2="100" y2="35" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                    <line id="second-hand" x1="100" y1="100" x2="100" y2="25" stroke="#ff6b6b" stroke-width="2" stroke-linecap="round"/>
+                    <circle cx="100" cy="100" r="6" fill="currentColor"/>
+                </svg>
+            </div>
+        </section>
+
+        <!-- Greeting Section -->
+        <section id="greeting-section">
+            <h1 id="greeting-text">Good morning</h1>
+            <p id="greeting-name" contenteditable="true" data-placeholder="Enter your name">Friend</p>
+        </section>
+
+        <!-- Weather Section -->
+        <section id="weather-section">
+            <div id="weather-widget" class="glass-container hidden">
+                <div class="glass-filter"></div>
+                <div class="glass-overlay"></div>
+                <div class="glass-specular"></div>
+                <div class="glass-content">
+                    <span id="weather-icon"></span>
+                    <span id="weather-temp"></span>
+                    <span id="weather-desc"></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search Bar -->
+        <section id="search-section">
+            <form id="search-form" class="glass-container">
+                <div class="glass-filter"></div>
+                <div class="glass-overlay"></div>
+                <div class="glass-specular"></div>
+                <input
+                    type="text"
+                    id="search-input"
+                    placeholder="Search the web..."
+                    autocomplete="off"
+                    spellcheck="false"
+                >
+                <button type="submit" id="search-button">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="7" cy="7" r="6"/>
+                        <path d="M11 11l6 6"/>
+                    </svg>
+                </button>
+            </form>
+        </section>
+
+        <!-- Quick Links -->
+        <section id="links-section">
+            <div id="quick-links"></div>
+            <button id="add-link-button" class="icon-button">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+            </button>
+        </section>
+    </main>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="settings-modal hidden">
+        <div class="settings-modal-overlay"></div>
+        <div class="settings-modal-content">
+            <header class="settings-header">
+                <div class="settings-title">
+                    <h2>So We Start</h2>
+                    <p class="settings-subtitle">Settings</p>
+                </div>
+                <button id="close-settings" class="icon-button">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="4" y1="4" x2="16" y2="16"/>
+                        <line x1="16" y1="4" x2="4" y2="16"/>
+                    </svg>
+                </button>
+            </header>
+
+            <!-- Tabs Navigation -->
+            <nav class="settings-tabs">
+                <button class="settings-tab active" data-tab="personal">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    <span>Personal</span>
+                </button>
+                <button class="settings-tab" data-tab="display">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2"/>
+                        <path d="M8 21h8M12 17v4"/>
+                    </svg>
+                    <span>Display</span>
+                </button>
+                <button class="settings-tab" data-tab="background">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <path d="M21 15l-5-5L5 21"/>
+                    </svg>
+                    <span>Background</span>
+                </button>
+                <button class="settings-tab" data-tab="links">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                    </svg>
+                    <span>Links</span>
+                </button>
+                <button class="settings-tab" data-tab="data">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                    </svg>
+                    <span>Data</span>
+                </button>
+            </nav>
+
+            <div class="settings-body">
+                <!-- General Settings Tab -->
+                <div class="settings-tab-content active" data-content="personal">
+                <div class="settings-section">
+                    <h3>Personal</h3>
+                    <div class="setting-item full-width">
+                        <label for="greeting-name-input">Your Name</label>
+                        <input type="text" id="greeting-name-input" placeholder="Enter your name">
+                        <small>Displayed in the greeting message</small>
+                    </div>
+                    <div class="setting-item full-width">
+                        <label for="language-select">Language</label>
+                        <select id="language-select">
+                            <option value="en">English</option>
+                            <option value="fr">Français</option>
+                            <option value="es">Español</option>
+                            <option value="de">Deutsch</option>
+                            <option value="it">Italiano</option>
+                            <option value="pt">Português</option>
+                            <option value="ru">Русский</option>
+                            <option value="zh">中文</option>
+                            <option value="ja">日本語</option>
+                            <option value="ar">العربية</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Clock</h3>
+                    <div class="setting-item full-width">
+                        <label for="clock-type">Display Style</label>
+                        <select id="clock-type">
+                            <option value="digital">Digital</option>
+                            <option value="analog">Analog</option>
+                            <option value="none">Hidden</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-row">
+                            <div class="setting-label">
+                                <label for="show-seconds-toggle">Show Seconds</label>
+                                <p class="setting-description">Display seconds on digital clock</p>
+                            </div>
+                            <div class="setting-control">
+                                <input type="checkbox" id="show-seconds-toggle">
+                                <label for="show-seconds-toggle" class="toggle-switch"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-row">
+                            <div class="setting-label">
+                                <label for="24hour-toggle">24-Hour Format</label>
+                                <p class="setting-description">Use 24-hour time instead of 12-hour</p>
+                            </div>
+                            <div class="setting-control">
+                                <input type="checkbox" id="24hour-toggle">
+                                <label for="24hour-toggle" class="toggle-switch"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Weather</h3>
+                    <div class="setting-item">
+                        <div class="setting-row">
+                            <div class="setting-label">
+                                <label for="weather-toggle">Show Weather</label>
+                                <p class="setting-description">Free weather with auto-detection (no signup required)</p>
+                            </div>
+                            <div class="setting-control">
+                                <input type="checkbox" id="weather-toggle">
+                                <label for="weather-toggle" class="toggle-switch"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="setting-item full-width">
+                        <label for="weather-location">City (Optional)</label>
+                        <input type="text" id="weather-location" placeholder="Auto-detected via IP">
+                        <small>Leave empty to auto-detect your city, or enter a city name</small>
+                    </div>
+                    <div class="setting-item full-width">
+                        <label for="weather-units">Temperature Units</label>
+                        <select id="weather-units">
+                            <option value="metric">Celsius (°C)</option>
+                            <option value="imperial">Fahrenheit (°F)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Search</h3>
+                    <div class="setting-item full-width">
+                        <label for="search-engine">Search Engine</label>
+                        <select id="search-engine">
+                            <option value="google">Google</option>
+                            <option value="duckduckgo">DuckDuckGo</option>
+                            <option value="bing">Bing</option>
+                            <option value="yahoo">Yahoo</option>
+                            <option value="ecosia">Ecosia</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                    </div>
+                    <div class="setting-item full-width hidden" id="custom-search-item">
+                        <label for="custom-search-url">Custom Search URL</label>
+                        <input type="url" id="custom-search-url" placeholder="https://example.com/search?q=%s">
+                        <small>Use %s as the query placeholder</small>
+                    </div>
+                </div>
+                </div>
+
+                <!-- Appearance Settings Tab -->
+                <div class="settings-tab-content" data-content="display">
+                <div class="settings-section">
+                    <h3>Theme</h3>
+                    <div class="setting-item full-width">
+                        <label for="theme-select">Color Mode</label>
+                        <select id="theme-select">
+                            <option value="auto">Auto (System)</option>
+                            <option value="light">Light</option>
+                            <option value="dark">Dark</option>
+                        </select>
+                        <small>Auto mode follows your system preference</small>
+                    </div>
+                    <div class="setting-item full-width">
+                        <label for="font-select">Font Family</label>
+                        <select id="font-select">
+                            <option value="system">System Default</option>
+                            <option value="Roboto">Roboto</option>
+                            <option value="Open Sans">Open Sans</option>
+                            <option value="Lato">Lato</option>
+                            <option value="Montserrat">Montserrat</option>
+                            <option value="Poppins">Poppins</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Favicon</h3>
+                    <div class="setting-item">
+                        <div class="setting-row">
+                            <div class="setting-label">
+                                <label for="favicon-emoji-toggle">Use Emoji Favicon</label>
+                                <p class="setting-description">Display emoji in browser tab</p>
+                            </div>
+                            <div class="setting-control">
+                                <input type="checkbox" id="favicon-emoji-toggle">
+                                <label for="favicon-emoji-toggle" class="toggle-switch"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="setting-item full-width">
+                        <label for="emoji-input">Emoji Icon</label>
+                        <input type="text" id="emoji-input" maxlength="2" placeholder="🍏">
+                        <small>Choose any emoji to represent your tab</small>
+                    </div>
+                </div>
+                </div>
+
+                <!-- Background Settings Tab -->
+                <div class="settings-tab-content" data-content="background">
+                <div class="settings-section">
+                    <h3>Image Source</h3>
+                    <div class="setting-item full-width">
+                        <label for="background-type">Background Type</label>
+                        <select id="background-type">
+                            <option value="picsum">Picsum Photos (Free)</option>
+                            <option value="pexels">Daily Photos (Free)</option>
+                            <option value="artinstitute">Art Institute of Chicago</option>
+                            <option value="custom">Custom Image URL</option>
+                            <option value="color">Solid Color</option>
+                        </select>
+                        <small>Changes daily for dynamic sources - no signup required</small>
+                    </div>
+                </div>
+
+                <div class="settings-section hidden" id="picsum-item">
+                    <h3>Picsum Photos</h3>
+                    <div class="setting-item full-width">
+                        <p class="setting-description">Beautiful curated images from Lorem Picsum. A new photo is selected daily from their collection.</p>
+                    </div>
+                </div>
+
+                <div class="settings-section hidden" id="pexels-item">
+                    <h3>Daily Photos</h3>
+                    <div class="setting-item full-width">
+                        <p class="setting-description">Beautiful high-quality photos that change daily. No signup required.</p>
+                    </div>
+                </div>
+
+                <div class="settings-section hidden" id="artinstitute-item">
+                    <h3>Art Institute Options</h3>
+                    <div class="setting-item full-width">
+                        <label for="art-search">Search Query</label>
+                        <input type="text" id="art-search" placeholder="e.g., landscape, sky, ocean">
+                        <small>Search public domain artwork from the Art Institute of Chicago</small>
+                    </div>
+                </div>
+
+                <div class="settings-section hidden" id="custom-bg-item">
+                    <h3>Custom Image</h3>
+                    <div class="setting-item full-width">
+                        <label for="custom-bg-url">Image URL</label>
+                        <input type="url" id="custom-bg-url" placeholder="https://example.com/image.jpg">
+                        <small>Direct link to your image (JPG, PNG, WebP)</small>
+                    </div>
+                </div>
+
+                <div class="settings-section hidden" id="bg-color-item">
+                    <h3>Background Color</h3>
+                    <div class="setting-item full-width">
+                        <label for="bg-color">Color</label>
+                        <input type="color" id="bg-color" value="#1a1a1a">
+                        <small>Choose a solid background color</small>
+                    </div>
+                </div>
+                </div>
+
+                <!-- Links Tab -->
+                <div class="settings-tab-content" data-content="links">
+                <div class="settings-section">
+                    <h3>Add Custom Link</h3>
+                    <div class="setting-item full-width">
+                        <label>Add Your Own Link</label>
+                        <button id="add-custom-link" class="btn-primary" style="width: 100%; margin: 0;">
+                            <span>+ Add Custom Link</span>
+                        </button>
+                        <small>Add any website or URL to your quick links</small>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Add Popular Sites</h3>
+                    <div id="popular-sites-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 0.5rem; margin-top: 0.5rem;">
+                        <!-- Popular sites will be added via JS -->
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Import Links</h3>
+                    <div class="setting-item full-width">
+                        <label>Import from Bookmarks</label>
+                        <button id="import-bookmarks" class="btn-secondary" style="width: 100%; margin: 0;">
+                            <span>📥 Import Bookmarks</span>
+                        </button>
+                        <small id="import-bookmarks-hint">Import bookmarks from your browser</small>
+                    </div>
+                </div>
+                </div>
+
+                <!-- Data Management Tab -->
+                <div class="settings-tab-content" data-content="data">
+                <div class="settings-section">
+                    <h3>Backup & Restore</h3>
+                    <div class="setting-item full-width">
+                        <label>Export Settings</label>
+                        <button id="export-settings" class="btn-secondary" style="width: 100%; margin: 0;">
+                            <span>Download Settings Backup</span>
+                        </button>
+                        <small>Save all your settings as a JSON file</small>
+                    </div>
+                    <div class="setting-item full-width">
+                        <label>Import Settings</label>
+                        <button id="import-settings" class="btn-secondary" style="width: 100%; margin: 0;">
+                            <span>Upload Settings Backup</span>
+                        </button>
+                        <input type="file" id="import-file-input" accept=".json" class="hidden">
+                        <small>Restore settings from a backup file</small>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Reset</h3>
+                    <div class="setting-item full-width">
+                        <label>Reset All Settings</label>
+                        <button id="reset-settings" class="btn-danger" style="width: 100%;">
+                            <span>Reset to Default</span>
+                        </button>
+                        <small>⚠️ This will erase all customizations and cannot be undone</small>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>About</h3>
+                    <div class="setting-item full-width" style="text-align: center;">
+                        <h4 style="margin: 0 0 0.5rem 0; font-size: 1.25rem; background: linear-gradient(135deg, var(--accent-color) 0%, #00a8cc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">So We Start</h4>
+                        <p style="margin: 0.5rem 0; font-size: 0.875rem; color: var(--text-secondary);">A beautiful, customizable new tab experience</p>
+                        <p style="margin: 1rem 0 0 0; font-size: 0.8125rem; color: var(--text-tertiary);">
+                            Created with ❤️ by <a href="https://gm-sunshine.com/" target="_blank" style="color: var(--accent-color); text-decoration: none; font-weight: 500;">GM Sunshine</a>
+                        </p>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.75rem; color: var(--text-tertiary);">
+                            Open Source • Free Forever
+                        </p>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link Editor Modal -->
+    <div id="link-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3 id="link-modal-title">Add Quick Link</h3>
+            <form id="link-form">
+                <div class="form-group">
+                    <label for="link-name">Name</label>
+                    <input type="text" id="link-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="link-url">URL</label>
+                    <input type="text" id="link-url" placeholder="https://example.com" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" id="cancel-link" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/utils.js?v=6.2"></script>
+    <script src="js/storage.js?v=6.2"></script>
+    <script src="js/background.js?v=6.2"></script>
+    <script src="js/clock.js?v=6.2"></script>
+    <script src="js/weather.js?v=6.2"></script>
+    <script src="js/search.js?v=6.2"></script>
+    <script src="js/links.js?v=6.2"></script>
+    <script src="js/settings.js?v=6.2"></script>
+    <script src="js/i18n.js?v=6.2"></script>
+    <script src="js/app.js?v=6.2"></script>
+</body>
+</html>

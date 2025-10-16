@@ -1,0 +1,24 @@
+{
+  "name": "sowestart",
+  "version": "1.0.0",
+  "description": "Beautiful, customizable and lightweight homepage",
+  "main": "index.html",
+  "scripts": {
+    "dev": "live-server --port=3000",
+    "build": "npm run minify",
+    "minify": "terser js/app.js -o js/app.min.js"
+  },
+  "keywords": [
+    "homepage",
+    "startpage",
+    "newtab",
+    "dashboard",
+    "productivity"
+  ],
+  "author": "Sowestart Team",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "terser": "^5.19.0"
+  }
+}
