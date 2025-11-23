@@ -50,6 +50,12 @@ class SowestartApp {
         // Initialize links
         linksManager.init();
 
+        // Initialize todo widget
+        todoManager.init();
+
+        // Initialize keyboard shortcuts
+        keyboardManager.init();
+
         // Initialize settings panel
         settingsManager.init();
     }

@@ -89,6 +89,37 @@
             </div>
         </section>
 
+        <!-- Todo Widget -->
+        <section id="todo-section">
+            <div id="todo-widget" class="glass-container hidden">
+                <div class="glass-filter"></div>
+                <div class="glass-overlay"></div>
+                <div class="glass-specular"></div>
+                <div class="glass-content">
+                    <div class="todo-header">
+                        <h3>Quick Notes</h3>
+                        <button id="toggle-todo-widget" class="icon-button-small" title="Toggle notes">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="todo-list-container" class="todo-list-container">
+                        <div class="todo-input-wrapper">
+                            <input type="text" id="todo-input" placeholder="Add a note..." autocomplete="off">
+                            <button id="add-todo-button" class="icon-button-small">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"/>
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <ul id="todo-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Search Bar -->
         <section id="search-section">
             <form id="search-form" class="glass-container">
@@ -237,6 +268,22 @@
                             <div class="setting-control">
                                 <input type="checkbox" id="24hour-toggle">
                                 <label for="24hour-toggle" class="toggle-switch"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Widgets</h3>
+                    <div class="setting-item">
+                        <div class="setting-row">
+                            <div class="setting-label">
+                                <label for="todo-widget-toggle">Show Quick Notes</label>
+                                <p class="setting-description">Display a todo list / notes widget on your new tab page</p>
+                            </div>
+                            <div class="setting-control">
+                                <input type="checkbox" id="todo-widget-toggle">
+                                <label for="todo-widget-toggle" class="toggle-switch"></label>
                             </div>
                         </div>
                     </div>
@@ -518,6 +565,8 @@
     <script src="js/weather.js?v=6.2"></script>
     <script src="js/search.js?v=6.2"></script>
     <script src="js/links.js?v=6.2"></script>
+    <script src="js/todo.js?v=6.2"></script>
+    <script src="js/keyboard.js?v=6.2"></script>
     <script src="js/settings.js?v=6.2"></script>
     <script src="js/i18n.js?v=6.2"></script>
     <script src="js/app.js?v=6.2"></script>

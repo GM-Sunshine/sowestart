@@ -1,6 +1,15 @@
-// Local Storage Management for Sowestart
+// Storage Management for Sowestart
+// Supports both chrome.storage.sync (for cross-device sync) and localStorage (fallback)
 
 const storage = {
+    // Check if Chrome storage API is available
+    get useChromeStorage() {
+        return typeof chrome !== 'undefined' && chrome.storage && chrome.storage.sync;
+    },
+
+    // Storage key
+    storageKey: 'sowestart-settings',
+
     // Default settings
     defaults: {
         // General
@@ -40,13 +49,40 @@ const storage = {
         // Links
         quickLinks: [],
 
+        // Todo widget
+        todoWidgetEnabled: false,
+        todoWidgetCollapsed: false,
+        todos: [],
+
         // Custom
         customCSS: ''
     },
 
-    // Get all settings
+    // Get all settings (async to support chrome.storage.sync)
+    async getAllAsync() {
+        if (this.useChromeStorage) {
+            return new Promise((resolve) => {
+                chrome.storage.sync.get([this.storageKey], (result) => {
+                    if (chrome.runtime.lastError) {
+                        console.warn('Chrome storage error, falling back to localStorage:', chrome.runtime.lastError);
+                        resolve(this.getAllFromLocalStorage());
+                    } else {
+                        const stored = result[this.storageKey] || {};
+                        resolve({ ...this.defaults, ...stored });
+                    }
+                });
+            });
+        }
+        return this.getAllFromLocalStorage();
+    },
+
+    // Synchronous fallback (uses localStorage)
     getAll() {
-        const stored = localStorage.getItem('sowestart-settings');
+        return this.getAllFromLocalStorage();
+    },
+
+    getAllFromLocalStorage() {
+        const stored = localStorage.getItem(this.storageKey);
         if (stored) {
             try {
                 return { ...this.defaults, ...JSON.parse(stored) };
@@ -74,13 +110,35 @@ const storage = {
             settings[keyOrObject] = value;
         }
 
-        localStorage.setItem('sowestart-settings', JSON.stringify(settings));
+        // Save to localStorage first (synchronous, for immediate use)
+        localStorage.setItem(this.storageKey, JSON.stringify(settings));
+
+        // Also save to chrome.storage.sync if available (async, for cross-device sync)
+        if (this.useChromeStorage) {
+            const dataToSync = { [this.storageKey]: settings };
+            chrome.storage.sync.set(dataToSync, () => {
+                if (chrome.runtime.lastError) {
+                    console.warn('Failed to sync to Chrome storage:', chrome.runtime.lastError);
+                }
+            });
+        }
+
         return settings;
     },
 
     // Reset to defaults
     reset() {
-        localStorage.removeItem('sowestart-settings');
+        localStorage.removeItem(this.storageKey);
+
+        // Also clear chrome.storage.sync if available
+        if (this.useChromeStorage) {
+            chrome.storage.sync.remove([this.storageKey], () => {
+                if (chrome.runtime.lastError) {
+                    console.warn('Failed to clear Chrome storage:', chrome.runtime.lastError);
+                }
+            });
+        }
+
         return { ...this.defaults };
     },
 
@@ -107,7 +165,20 @@ const storage = {
             reader.onload = (e) => {
                 try {
                     const settings = JSON.parse(e.target.result);
-                    localStorage.setItem('sowestart-settings', JSON.stringify(settings));
+
+                    // Save to localStorage
+                    localStorage.setItem(this.storageKey, JSON.stringify(settings));
+
+                    // Also save to chrome.storage.sync if available
+                    if (this.useChromeStorage) {
+                        const dataToSync = { [this.storageKey]: settings };
+                        chrome.storage.sync.set(dataToSync, () => {
+                            if (chrome.runtime.lastError) {
+                                console.warn('Failed to sync imported settings:', chrome.runtime.lastError);
+                            }
+                        });
+                    }
+
                     resolve(settings);
                 } catch (error) {
                     reject(new Error('Invalid settings file'));

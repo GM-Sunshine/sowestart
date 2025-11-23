@@ -209,6 +209,15 @@ const settingsManager = {
             });
         }
 
+        // Todo widget settings
+        const todoWidgetToggle = document.getElementById('todo-widget-toggle');
+        if (todoWidgetToggle) {
+            todoWidgetToggle.addEventListener('change', (e) => {
+                storage.set('todoWidgetEnabled', e.target.checked);
+                todoManager.updateVisibility();
+            });
+        }
+
         // Weather settings
         const weatherToggle = document.getElementById('weather-toggle');
         if (weatherToggle) {
@@ -329,6 +338,9 @@ const settingsManager = {
         document.getElementById('clock-type').value = settings.clockType || 'digital';
         document.getElementById('show-seconds-toggle').checked = settings.showSeconds || false;
         document.getElementById('24hour-toggle').checked = settings.use24Hour || false;
+
+        // Todo widget
+        document.getElementById('todo-widget-toggle').checked = settings.todoWidgetEnabled || false;
 
         // Weather
         document.getElementById('weather-toggle').checked = settings.weatherEnabled || false;
