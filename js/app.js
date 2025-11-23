@@ -53,6 +53,10 @@ class SowestartApp {
         // Initialize todo widget
         todoManager.init();
 
+        // Initialize focus timer
+        focusTimerManager.init();
+        focusTimerManager.requestNotificationPermission();
+
         // Initialize keyboard shortcuts
         keyboardManager.init();
 

@@ -8,10 +8,12 @@ A beautiful new tab page with liquid glass design, quick links, weather, and cus
 ## Features
 
 - 🌅 **Liquid Glass Design** - Modern glassmorphism UI with smooth animations
+- 🎯 **Focus Timer** - Pomodoro timer with work/break cycles and session tracking
 - 📝 **Quick Notes** - Built-in todo list / notes widget for productivity
 - 🔗 **Quick Links** - Add your favorite sites with automatic favicons
 - 🌤️ **Weather Widget** - Real-time weather with auto-location
 - 🎨 **Custom Backgrounds** - Sourcesplash, Picsum Photos, Art Institute of Chicago, or your own images
+- 🎨 **Accent Color Picker** - Customize colors to match your style
 - ⏰ **Clock** - Digital or analog with 12/24 hour format
 - 🔍 **Quick Search** - Search with multiple engines (Google, DuckDuckGo, etc.)
 - ⌨️ **Keyboard Shortcuts** - Cmd/Ctrl+K for search, Cmd/Ctrl+/ for settings, Esc to close

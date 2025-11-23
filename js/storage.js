@@ -54,6 +54,12 @@ const storage = {
         todoWidgetCollapsed: false,
         todos: [],
 
+        // Focus timer
+        focusTimerEnabled: false,
+        focusTimerCollapsed: false,
+        focusTimerSessions: 0,
+        focusTimerDate: null,
+
         // Custom
         customCSS: ''
     },

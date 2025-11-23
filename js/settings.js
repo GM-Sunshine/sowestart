@@ -112,6 +112,24 @@ const settingsManager = {
             });
         }
 
+        const accentColorPicker = document.getElementById('accent-color');
+        if (accentColorPicker) {
+            accentColorPicker.addEventListener('change', (e) => {
+                storage.set('accentColor', e.target.value);
+                this.applyAccentColor(e.target.value);
+            });
+        }
+
+        const resetAccentColor = document.getElementById('reset-accent-color');
+        if (resetAccentColor) {
+            resetAccentColor.addEventListener('click', () => {
+                const defaultColor = '#667eea';
+                storage.set('accentColor', defaultColor);
+                document.getElementById('accent-color').value = defaultColor;
+                this.applyAccentColor(defaultColor);
+            });
+        }
+
         const faviconToggle = document.getElementById('favicon-emoji-toggle');
         if (faviconToggle) {
             faviconToggle.addEventListener('change', (e) => {
@@ -206,6 +224,15 @@ const settingsManager = {
         if (hour24Toggle) {
             hour24Toggle.addEventListener('change', (e) => {
                 storage.set('use24Hour', e.target.checked);
+            });
+        }
+
+        // Focus timer settings
+        const focusTimerToggle = document.getElementById('focus-timer-toggle');
+        if (focusTimerToggle) {
+            focusTimerToggle.addEventListener('change', (e) => {
+                storage.set('focusTimerEnabled', e.target.checked);
+                focusTimerManager.updateVisibility();
             });
         }
 
@@ -320,6 +347,7 @@ const settingsManager = {
 
         // Appearance
         document.getElementById('theme-select').value = settings.theme;
+        document.getElementById('accent-color').value = settings.accentColor || '#667eea';
         document.getElementById('font-select').value = settings.font;
         document.getElementById('favicon-emoji-toggle').checked = settings.useFaviconEmoji;
         document.getElementById('emoji-input').value = settings.faviconEmoji;
@@ -338,6 +366,9 @@ const settingsManager = {
         document.getElementById('clock-type').value = settings.clockType || 'digital';
         document.getElementById('show-seconds-toggle').checked = settings.showSeconds || false;
         document.getElementById('24hour-toggle').checked = settings.use24Hour || false;
+
+        // Focus timer
+        document.getElementById('focus-timer-toggle').checked = settings.focusTimerEnabled || false;
 
         // Todo widget
         document.getElementById('todo-widget-toggle').checked = settings.todoWidgetEnabled || false;
@@ -360,6 +391,7 @@ const settingsManager = {
 
         // Apply settings
         this.applyTheme(settings.theme);
+        this.applyAccentColor(settings.accentColor || '#667eea');
         this.applyFont(settings.font);
         if (settings.customCSS) {
             this.applyCustomCSS(settings.customCSS);
@@ -438,6 +470,26 @@ const settingsManager = {
             body.classList.remove('theme-dark');
             body.classList.add('theme-light');
         }
+    },
+
+    applyAccentColor(color) {
+        document.documentElement.style.setProperty('--accent-color', color);
+
+        // Calculate lighter version for hover
+        const rgb = this.hexToRgb(color);
+        if (rgb) {
+            const lighter = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.9)`;
+            document.documentElement.style.setProperty('--accent-hover', lighter);
+        }
+    },
+
+    hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
     },
 
     applyFont(font) {
