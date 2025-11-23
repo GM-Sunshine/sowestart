@@ -75,6 +75,39 @@
             <p id="greeting-name" contenteditable="true" data-placeholder="Enter your name">Friend</p>
         </section>
 
+        <!-- Quote Section -->
+        <section id="quote-section">
+            <div id="quote-widget" class="glass-container hidden">
+                <div class="glass-filter"></div>
+                <div class="glass-overlay"></div>
+                <div class="glass-specular"></div>
+                <div class="glass-content">
+                    <div class="quote-content">
+                        <svg class="quote-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
+                            <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"></path>
+                        </svg>
+                        <blockquote id="quote-text" class="quote-text">Loading...</blockquote>
+                        <cite id="quote-author" class="quote-author">—</cite>
+                    </div>
+                    <div class="quote-actions">
+                        <button id="refresh-quote" class="quote-action-btn" title="New quote">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="1 4 1 10 7 10"></polyline>
+                                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                            </svg>
+                        </button>
+                        <button id="copy-quote" class="quote-action-btn" title="Copy quote">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Weather Section -->
         <section id="weather-section">
             <div id="weather-widget" class="glass-container hidden">
@@ -85,6 +118,188 @@
                     <span id="weather-icon"></span>
                     <span id="weather-temp"></span>
                     <span id="weather-desc"></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Widgets Section -->
+        <section id="widgets-section">
+            <!-- Focus Timer Widget -->
+            <div id="focus-timer-widget" class="glass-container widget hidden">
+                <div class="glass-filter"></div>
+                <div class="glass-overlay"></div>
+                <div class="glass-specular"></div>
+                <div class="glass-content">
+                    <div class="widget-header">
+                        <h3>🎯 Focus Timer</h3>
+                        <button id="toggle-focus-widget" class="icon-button-small" title="Toggle timer">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="focus-timer-container" class="focus-timer-container">
+                        <div class="timer-mode">
+                            <span id="timer-mode-label">Focus Time</span>
+                        </div>
+                        <div class="timer-display">
+                            <span id="timer-minutes">25</span>
+                            <span class="timer-separator">:</span>
+                            <span id="timer-seconds">00</span>
+                        </div>
+                        <div class="timer-controls">
+                            <button id="timer-start" class="timer-btn timer-btn-primary">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                </svg>
+                                Start
+                            </button>
+                            <button id="timer-pause" class="timer-btn timer-btn-secondary hidden">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="6" y="4" width="4" height="16"></rect>
+                                    <rect x="14" y="4" width="4" height="16"></rect>
+                                </svg>
+                                Pause
+                            </button>
+                            <button id="timer-reset" class="timer-btn timer-btn-tertiary">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="1 4 1 10 7 10"></polyline>
+                                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="timer-stats">
+                            <div class="timer-stat">
+                                <span class="stat-label">Today</span>
+                                <span id="timer-sessions" class="stat-value">0</span>
+                            </div>
+                            <div class="timer-stat">
+                                <span class="stat-label">This Week</span>
+                                <span id="timer-week-total" class="stat-value">0</span>
+                            </div>
+                        </div>
+                        <div class="timer-weekly-graph" id="timer-weekly-graph">
+                            <div class="graph-title">Last 7 Days</div>
+                            <div class="graph-bars" id="timer-graph-bars">
+                                <!-- Bars will be generated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Todo Widget -->
+            <div id="todo-widget" class="glass-container widget hidden">
+                <div class="glass-filter"></div>
+                <div class="glass-overlay"></div>
+                <div class="glass-specular"></div>
+                <div class="glass-content">
+                    <div class="widget-header">
+                        <h3>Quick Notes</h3>
+                        <button id="toggle-todo-widget" class="icon-button-small" title="Toggle notes">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="todo-list-container" class="todo-list-container">
+                        <div class="todo-input-wrapper">
+                            <input type="text" id="todo-input" placeholder="Add a note..." autocomplete="off">
+                            <button id="add-todo-button" class="icon-button-small">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"/>
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <ul id="todo-list"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RSS Feed Widget -->
+            <div id="rss-widget" class="glass-container widget hidden">
+                <div class="glass-filter"></div>
+                <div class="glass-overlay"></div>
+                <div class="glass-specular"></div>
+                <div class="glass-content">
+                    <div class="widget-header">
+                        <h3>📰 News Feed</h3>
+                        <div class="rss-header-actions">
+                            <button id="refresh-rss" class="icon-button-small" title="Refresh feeds">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="1 4 1 10 7 10"></polyline>
+                                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                                </svg>
+                            </button>
+                            <button id="toggle-rss-widget" class="icon-button-small" title="Toggle feed">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="rss-container" class="rss-container">
+                        <div id="rss-feed-list" class="rss-feed-list"></div>
+                        <div id="rss-empty" class="rss-empty hidden">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 11a9 9 0 0 1 9 9"></path>
+                                <path d="M4 4a16 16 0 0 1 16 16"></path>
+                                <circle cx="5" cy="19" r="1"></circle>
+                            </svg>
+                            <p>No RSS feeds configured</p>
+                            <button id="add-rss-feed-btn" class="btn-primary">Add Feed</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendar Widget -->
+            <div id="calendar-widget" class="glass-container widget hidden" role="region" aria-label="Calendar widget">
+                <div class="glass-filter"></div>
+                <div class="glass-overlay"></div>
+                <div class="glass-specular"></div>
+                <div class="glass-content">
+                    <div class="widget-header">
+                        <h3>📅 Calendar</h3>
+                        <div class="calendar-header-actions">
+                            <button id="refresh-calendar" class="icon-button-small" title="Refresh calendar" aria-label="Refresh calendar events">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <polyline points="1 4 1 10 7 10"></polyline>
+                                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                                </svg>
+                            </button>
+                            <button id="toggle-calendar-widget" class="icon-button-small" title="Toggle calendar" aria-label="Toggle calendar visibility" aria-expanded="true">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="calendar-container" class="calendar-container">
+                        <div id="calendar-today" class="calendar-today hidden">
+                            <div class="today-header" role="heading" aria-level="4">Today</div>
+                            <div id="calendar-today-events" class="calendar-events-list" role="list" aria-label="Today's events">
+                                <!-- Today's events will be rendered here -->
+                            </div>
+                        </div>
+                        <div class="calendar-upcoming">
+                            <div class="upcoming-header" role="heading" aria-level="4">Upcoming</div>
+                            <div id="calendar-upcoming-events" class="calendar-events-list" role="list" aria-label="Upcoming events">
+                                <!-- Upcoming events will be rendered here -->
+                            </div>
+                        </div>
+                        <div id="calendar-empty" class="calendar-empty hidden">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                            <p>No calendar feeds configured</p>
+                            <button id="add-calendar-feed-btn" class="btn-primary" aria-label="Add calendar feed">Add Calendar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -243,6 +458,129 @@
                 </div>
 
                 <div class="settings-section">
+                    <h3>Widgets</h3>
+                    <div class="setting-item">
+                        <div class="setting-row">
+                            <div class="setting-label">
+                                <label for="quotes-toggle">Show Inspirational Quotes</label>
+                                <p class="setting-description">Display daily motivational quotes from famous authors</p>
+                            </div>
+                            <div class="setting-control">
+                                <input type="checkbox" id="quotes-toggle">
+                                <label for="quotes-toggle" class="toggle-switch"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="setting-item full-width hidden" id="quote-category-item">
+                        <label for="quote-category">Quote Category</label>
+                        <select id="quote-category">
+                            <option value="all">All Topics</option>
+                            <option value="motivational">Motivational</option>
+                            <option value="wisdom">Wisdom</option>
+                            <option value="success">Success</option>
+                            <option value="life">Life</option>
+                            <option value="happiness">Happiness</option>
+                            <option value="friendship">Friendship</option>
+                            <option value="love">Love</option>
+                        </select>
+                        <small>Choose what type of quotes inspire you most</small>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-row">
+                            <div class="setting-label">
+                                <label for="focus-timer-toggle">Show Focus Timer</label>
+                                <p class="setting-description">Pomodoro timer to boost your productivity</p>
+                            </div>
+                            <div class="setting-control">
+                                <input type="checkbox" id="focus-timer-toggle">
+                                <label for="focus-timer-toggle" class="toggle-switch"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="setting-item full-width hidden" id="focus-timer-settings">
+                        <h4 style="margin: 0 0 1rem 0; font-size: 0.875rem; color: var(--text-secondary); font-weight: 600;">Timer Durations (minutes)</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+                            <div>
+                                <label for="timer-focus-duration" style="font-size: 0.75rem; color: var(--text-tertiary); margin-bottom: 0.25rem; display: block;">Focus</label>
+                                <input type="number" id="timer-focus-duration" min="1" max="60" value="25" style="width: 100%; padding: 0.5rem; text-align: center;">
+                            </div>
+                            <div>
+                                <label for="timer-short-break-duration" style="font-size: 0.75rem; color: var(--text-tertiary); margin-bottom: 0.25rem; display: block;">Short Break</label>
+                                <input type="number" id="timer-short-break-duration" min="1" max="30" value="5" style="width: 100%; padding: 0.5rem; text-align: center;">
+                            </div>
+                            <div>
+                                <label for="timer-long-break-duration" style="font-size: 0.75rem; color: var(--text-tertiary); margin-bottom: 0.25rem; display: block;">Long Break</label>
+                                <input type="number" id="timer-long-break-duration" min="1" max="60" value="15" style="width: 100%; padding: 0.5rem; text-align: center;">
+                            </div>
+                        </div>
+                        <label for="timer-sound" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--text-secondary);">Notification Sound</label>
+                        <select id="timer-sound" style="margin-bottom: 1rem;">
+                            <option value="bell">🔔 Bell</option>
+                            <option value="chime">🎵 Chime</option>
+                            <option value="gong">🎐 Gong</option>
+                            <option value="ping">📍 Ping</option>
+                            <option value="none">🔇 Silent</option>
+                        </select>
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+                            <label for="timer-auto-start" style="font-size: 0.875rem; color: var(--text-secondary);">Auto-start next session</label>
+                            <input type="checkbox" id="timer-auto-start">
+                            <label for="timer-auto-start" class="toggle-switch"></label>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <label for="timer-break-activities" style="font-size: 0.875rem; color: var(--text-secondary);">Show break activity suggestions</label>
+                            <input type="checkbox" id="timer-break-activities" checked>
+                            <label for="timer-break-activities" class="toggle-switch"></label>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-row">
+                            <div class="setting-label">
+                                <label for="todo-widget-toggle">Show Quick Notes</label>
+                                <p class="setting-description">Display a todo list / notes widget on your new tab page</p>
+                            </div>
+                            <div class="setting-control">
+                                <input type="checkbox" id="todo-widget-toggle">
+                                <label for="todo-widget-toggle" class="toggle-switch"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-row">
+                            <div class="setting-label">
+                                <label for="rss-widget-toggle">Show News Feed</label>
+                                <p class="setting-description">Display RSS feeds from Hacker News, The Verge, and custom sources</p>
+                            </div>
+                            <div class="setting-control">
+                                <input type="checkbox" id="rss-widget-toggle">
+                                <label for="rss-widget-toggle" class="toggle-switch"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-row">
+                            <div class="setting-label">
+                                <label for="calendar-widget-toggle">Show Calendar</label>
+                                <p class="setting-description">Display events from Google Calendar, Outlook, or any iCal feed</p>
+                            </div>
+                            <div class="setting-control">
+                                <input type="checkbox" id="calendar-widget-toggle">
+                                <label for="calendar-widget-toggle" class="toggle-switch"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="setting-item full-width hidden" id="calendar-settings">
+                        <h4 style="margin: 0 0 1rem 0; font-size: 0.875rem; color: var(--text-secondary); font-weight: 600;">Calendar Feeds</h4>
+                        <div id="calendar-feeds-list" style="margin-bottom: 1rem;">
+                            <!-- Calendar feeds will be listed here -->
+                        </div>
+                        <button id="add-calendar-feed" class="btn-secondary" style="width: 100%;">
+                            <span>+ Add Calendar Feed</span>
+                        </button>
+                        <small style="display: block; margin-top: 0.5rem;">Supports Google Calendar, Outlook, Apple Calendar (iCal/ICS URLs)</small>
+                    </div>
+                </div>
+
+                <div class="settings-section">
                     <h3>Weather</h3>
                     <div class="setting-item">
                         <div class="setting-row">
@@ -305,6 +643,19 @@
                         <small>Auto mode follows your system preference</small>
                     </div>
                     <div class="setting-item full-width">
+                        <label for="accent-color">Accent Color</label>
+                        <div class="color-picker-wrapper">
+                            <input type="color" id="accent-color" value="#667eea">
+                            <button id="reset-accent-color" class="btn-reset-color" title="Reset to default">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="1 4 1 10 7 10"></polyline>
+                                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <small>Customize buttons, links, and highlights</small>
+                    </div>
+                    <div class="setting-item full-width">
                         <label for="font-select">Font Family</label>
                         <select id="font-select">
                             <option value="system">System Default</option>
@@ -347,6 +698,7 @@
                         <label for="background-type">Background Type</label>
                         <select id="background-type">
                             <option value="picsum">Picsum Photos (Free)</option>
+                            <option value="sourcesplash">Sourcesplash (Free)</option>
                             <option value="pexels">Daily Photos (Free)</option>
                             <option value="artinstitute">Art Institute of Chicago</option>
                             <option value="custom">Custom Image URL</option>
@@ -367,6 +719,15 @@
                     <h3>Daily Photos</h3>
                     <div class="setting-item full-width">
                         <p class="setting-description">Beautiful high-quality photos that change daily. No signup required.</p>
+                    </div>
+                </div>
+
+                <div class="settings-section hidden" id="sourcesplash-item">
+                    <h3>Sourcesplash Options</h3>
+                    <div class="setting-item full-width">
+                        <label for="sourcesplash-search">Search Query (Optional)</label>
+                        <input type="text" id="sourcesplash-search" placeholder="e.g., nature, city, ocean">
+                        <small>Free images from Pexels, Pixabay, and Unsplash. Leave empty for random.</small>
                     </div>
                 </div>
 
@@ -501,6 +862,48 @@
         </div>
     </div>
 
+    <!-- Command Palette Modal -->
+    <div id="command-palette" class="command-palette hidden">
+        <div class="command-palette-overlay"></div>
+        <div class="command-palette-content">
+            <div class="command-search-box">
+                <svg class="command-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="M21 21l-4.35-4.35"/>
+                </svg>
+                <input type="text" id="command-input" placeholder="Type a command or search..." autocomplete="off" spellcheck="false">
+                <button id="close-command-palette" class="command-close-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="command-results" id="command-results">
+                <div class="command-empty">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 16v-4"/>
+                        <path d="M12 8h.01"/>
+                    </svg>
+                    <p>Type to search for commands, links, or actions</p>
+                    <div class="command-hints">
+                        <span class="hint-badge">🔗 Quick links</span>
+                        <span class="hint-badge">⚙️ Settings</span>
+                        <span class="hint-badge">⏱️ Timer actions</span>
+                    </div>
+                </div>
+            </div>
+            <div class="command-footer">
+                <div class="command-footer-hints">
+                    <span class="hint"><kbd>↑</kbd><kbd>↓</kbd> Navigate</span>
+                    <span class="hint"><kbd>Enter</kbd> Select</span>
+                    <span class="hint"><kbd>Esc</kbd> Close</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="js/utils.js?v=6.2"></script>
     <script src="js/storage.js?v=6.2"></script>
     <script src="js/background.js?v=6.2"></script>
@@ -508,6 +911,13 @@
     <script src="js/weather.js?v=6.2"></script>
     <script src="js/search.js?v=6.2"></script>
     <script src="js/links.js?v=6.2"></script>
+    <script src="js/todo.js?v=6.2"></script>
+    <script src="js/focusTimer.js?v=6.2"></script>
+    <script src="js/quotes.js?v=6.2"></script>
+    <script src="js/rss.js?v=6.2"></script>
+    <script src="js/calendar.js?v=6.2"></script>
+    <script src="js/commands.js?v=6.2"></script>
+    <script src="js/keyboard.js?v=6.2"></script>
     <script src="js/settings.js?v=6.2"></script>
     <script src="js/i18n.js?v=6.2"></script>
     <script src="js/app.js?v=6.2"></script>

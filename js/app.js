@@ -50,6 +50,28 @@ class SowestartApp {
         // Initialize links
         linksManager.init();
 
+        // Initialize todo widget
+        todoManager.init();
+
+        // Initialize focus timer
+        focusTimerManager.init();
+        focusTimerManager.requestNotificationPermission();
+
+        // Initialize quotes
+        quotesManager.init();
+
+        // Initialize RSS feed
+        rssManager.init();
+
+        // Initialize calendar
+        calendarManager.init();
+
+        // Initialize command palette
+        commandPaletteManager.init();
+
+        // Initialize keyboard shortcuts
+        keyboardManager.init();
+
         // Initialize settings panel
         settingsManager.init();
     }

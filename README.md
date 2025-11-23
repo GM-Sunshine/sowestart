@@ -8,14 +8,24 @@ A beautiful new tab page with liquid glass design, quick links, weather, and cus
 ## Features
 
 - 🌅 **Liquid Glass Design** - Modern glassmorphism UI with smooth animations
+- 🎯 **Advanced Focus Timer** - Pomodoro timer with custom durations, 4 notification sounds, weekly statistics graph, auto-start, and break activity suggestions
+- 📝 **Quick Notes** - Built-in todo list / notes widget for productivity
+- 📰 **RSS News Feed** - Stay updated with feeds from Hacker News, The Verge, and custom sources
+- 📅 **Calendar Integration** - Connect Google Calendar, Outlook, or any iCal feed - view today's events and upcoming schedule
+- 💬 **Inspirational Quotes** - Daily motivational quotes from famous authors with 8 categories
+- 🚀 **Command Palette** - Quick launcher with fuzzy search (Cmd+P) for sites, settings, timer actions, and widgets - with recent command history
 - 🔗 **Quick Links** - Add your favorite sites with automatic favicons
 - 🌤️ **Weather Widget** - Real-time weather with auto-location
-- 🎨 **Custom Backgrounds** - Picsum Photos, Art Institute of Chicago, or your own images
+- 🎨 **Custom Backgrounds** - Sourcesplash, Picsum Photos, Art Institute of Chicago, or your own images
+- 🎨 **Accent Color Picker** - Customize colors to match your style
 - ⏰ **Clock** - Digital or analog with 12/24 hour format
 - 🔍 **Quick Search** - Search with multiple engines (Google, DuckDuckGo, etc.)
+- ⌨️ **Keyboard Shortcuts** - Cmd/Ctrl+P for command palette, Cmd/Ctrl+K for search, Cmd/Ctrl+/ for settings
 - 📚 **Bookmark Import** - Import directly from Chrome or upload HTML file
 - 🎭 **Themes** - Light, dark, or auto mode
+- 🔄 **Chrome Sync** - Settings sync across devices (when Chrome Sync is enabled)
 - 💾 **Data Export/Import** - Backup and restore your settings
+- 🔒 **Privacy First** - No tracking, no accounts, all data stored locally
 
 ## Installation
 
@@ -39,12 +49,27 @@ Simply open `index.html` in your browser to preview the demo version.
 - Bookmark import uses file upload instead of Chrome API
 - Settings stored in localStorage instead of chrome.storage
 
+## Keyboard Shortcuts
+
+Make your workflow faster with these shortcuts:
+
+- **Cmd/Ctrl + P** - Open command palette (quick launcher)
+- **Cmd/Ctrl + K** - Focus search bar
+- **Cmd/Ctrl + /** - Toggle settings
+- **Escape** - Close command palette, settings, or unfocus search
+- **↑ / ↓** (in command palette) - Navigate commands
+- **Enter** (in command palette) - Execute selected command
+- **Enter** (in todo input) - Add new note
+
 ## APIs Used
 
+- **Sourcesplash** - Free images from Pexels, Pixabay, and Unsplash
 - **Picsum Photos** - Random photos
 - **Art Institute of Chicago** - Artwork images
 - **Open-Meteo** - Weather data
 - **ipwho.is** - IP-based geolocation
+- **Quotable.io** - Inspirational quotes
+- **AllOrigins** - CORS proxy for RSS feeds
 
 
 ## Credits
@@ -55,11 +80,17 @@ Created with ❤️ by [GM Sunshine](https://gm-sunshine.com/)
 
 MIT License - Feel free to use and modify!
 
+## Privacy
+
+Your privacy matters. So We Start does not collect, store, or transmit any personal data to external servers. All settings and data are stored locally on your device.
+
+Read our full [Privacy Policy](privacy.html) for details.
+
 ## Support
 
 For issues or feature requests, please visit the GitHub repository.
 
 ---
 
-**Version:** 1.0.0  
+**Version:** 1.0.0
 **Last Updated:** 2025

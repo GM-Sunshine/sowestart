@@ -8,8 +8,14 @@
     "bookmarks"
   ],
   "host_permissions": [
-    "https://*/*",
-    "http://*/*"
+    "https://www.sourcesplash.com/*",
+    "https://picsum.photos/*",
+    "https://api.artic.edu/*",
+    "https://www.artic.edu/*",
+    "https://api.open-meteo.com/*",
+    "https://ipwho.is/*",
+    "https://api.quotable.io/*",
+    "https://api.allorigins.win/*"
   ],
   "chrome_url_overrides": {
     "newtab": "index.html"
@@ -22,6 +28,15 @@
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;"
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+S",
+        "mac": "Command+Shift+S"
+      },
+      "description": "Open So We Start new tab"
+    }
   },
   "author": "GM Sunshine",
   "homepage_url": "https://gm-sunshine.com/"
