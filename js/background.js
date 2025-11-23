@@ -2,13 +2,27 @@
 
 const backgroundManager = {
     currentImageUrl: null,
-    
+
     // Curated collection IDs for different moods/times
     collections: {
         morning: '3330445',   // Sunrise and morning scenes
         afternoon: '1065976', // Bright daylight
         evening: '2823814',   // Sunset and golden hour
         night: '1590691'      // Night sky and stars
+    },
+
+    showLoader() {
+        const loader = document.getElementById('background-loader');
+        if (loader) {
+            loader.classList.remove('hidden');
+        }
+    },
+
+    hideLoader() {
+        const loader = document.getElementById('background-loader');
+        if (loader) {
+            loader.classList.add('hidden');
+        }
     },
 
     async init() {
@@ -36,6 +50,12 @@ const backgroundManager = {
             default:
                 await this.loadPicsumBackground();
         }
+    },
+
+    async forceRefresh() {
+        // Clear cached background to force a new image
+        storage.set('currentBackground', null);
+        await this.init();
     },
 
     async loadPicsumBackground() {
@@ -83,16 +103,19 @@ const backgroundManager = {
     async loadSourcesplashBackground() {
         const cached = storage.get('currentBackground');
         const today = new Date().toDateString();
+        const query = storage.get('sourcesplashSearch') || '';
 
-        if (cached && cached.date === today && cached.url && cached.type === 'sourcesplash') {
+        // Check if cached background is valid (same date AND same query)
+        if (cached && cached.date === today && cached.url && cached.type === 'sourcesplash' && cached.query === query) {
             this.setBackground(cached.url);
             return;
         }
 
+        this.showLoader();
+
         try {
             const width = Math.min(window.screen.width * window.devicePixelRatio, 2560);
             const height = Math.min(window.screen.height * window.devicePixelRatio, 1440);
-            const query = storage.get('sourcesplashSearch') || '';
 
             // Build Sourcesplash URL
             let imageUrl = `https://www.sourcesplash.com/i/random?w=${width}&h=${height}`;
@@ -106,9 +129,10 @@ const backgroundManager = {
             imageUrl += `&seed=${seed}`;
 
             this.setBackground(imageUrl);
-            storage.set('currentBackground', { url: imageUrl, date: today, type: 'sourcesplash' });
+            storage.set('currentBackground', { url: imageUrl, date: today, type: 'sourcesplash', query: query });
         } catch (error) {
             console.error('Failed to load Sourcesplash background:', error);
+            this.hideLoader();
             this.loadFallbackBackground();
         }
     },
@@ -149,14 +173,15 @@ const backgroundManager = {
     async loadArtInstituteBackground() {
         const cached = storage.get('currentBackground');
         const today = new Date().toDateString();
+        const query = storage.get('artSearch') || 'landscape';
 
-        if (cached && cached.date === today && cached.url && cached.type === 'artinstitute') {
+        // Check if cached background is valid (same date AND same query)
+        if (cached && cached.date === today && cached.url && cached.type === 'artinstitute' && cached.query === query) {
             this.setBackground(cached.url);
             return;
         }
 
         try {
-            const query = storage.get('artSearch') || 'landscape';
             const response = await fetch(`https://api.artic.edu/api/v1/artworks/search?q=${encodeURIComponent(query)}&query[term][is_public_domain]=true&fields=id,title,image_id&limit=100`);
             const data = await response.json();
 
@@ -169,7 +194,7 @@ const backgroundManager = {
                 const imageUrl = `https://www.artic.edu/iiif/2/${artwork.image_id}/full/1686,/0/default.jpg`;
 
                 this.setBackground(imageUrl);
-                storage.set('currentBackground', { url: imageUrl, date: today, type: 'artinstitute' });
+                storage.set('currentBackground', { url: imageUrl, date: today, type: 'artinstitute', query: query });
             } else {
                 throw new Error('No artworks found');
             }
@@ -208,6 +233,11 @@ const backgroundManager = {
             bgImage.style.display = 'block';
             bgImage.style.opacity = '1';
             overlay.style.background = 'linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.4) 100%)';
+            this.hideLoader();
+        };
+        img.onerror = () => {
+            console.error('Failed to load background image');
+            this.hideLoader();
         };
         img.src = url;
         this.currentImageUrl = url;
