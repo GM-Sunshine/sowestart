@@ -20,12 +20,14 @@ const settingsManager = {
                 e.preventDefault();
                 console.log('Settings icon clicked');
                 modal.classList.toggle('hidden');
+                document.body.classList.toggle('settings-open', !modal.classList.contains('hidden'));
             });
         }
 
         if (closeButton && modal) {
             closeButton.addEventListener('click', () => {
                 modal.classList.add('hidden');
+                document.body.classList.remove('settings-open');
             });
         }
 
@@ -33,6 +35,7 @@ const settingsManager = {
         if (overlay && modal) {
             overlay.addEventListener('click', () => {
                 modal.classList.add('hidden');
+                document.body.classList.remove('settings-open');
             });
         }
 
@@ -40,6 +43,7 @@ const settingsManager = {
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
                 modal.classList.add('hidden');
+                document.body.classList.remove('settings-open');
             }
         });
 
@@ -201,6 +205,20 @@ const settingsManager = {
                 if (storage.get('backgroundType') === 'color') {
                     backgroundManager.init();
                 }
+            });
+        }
+
+        const refreshSourcesplash = document.getElementById('refresh-sourcesplash');
+        if (refreshSourcesplash) {
+            refreshSourcesplash.addEventListener('click', () => {
+                backgroundManager.forceRefresh();
+            });
+        }
+
+        const refreshArtInstitute = document.getElementById('refresh-artinstitute');
+        if (refreshArtInstitute) {
+            refreshArtInstitute.addEventListener('click', () => {
+                backgroundManager.forceRefresh();
             });
         }
 
