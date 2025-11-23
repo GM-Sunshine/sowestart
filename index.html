@@ -75,6 +75,39 @@
             <p id="greeting-name" contenteditable="true" data-placeholder="Enter your name">Friend</p>
         </section>
 
+        <!-- Quote Section -->
+        <section id="quote-section">
+            <div id="quote-widget" class="glass-container hidden">
+                <div class="glass-filter"></div>
+                <div class="glass-overlay"></div>
+                <div class="glass-specular"></div>
+                <div class="glass-content">
+                    <div class="quote-content">
+                        <svg class="quote-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
+                            <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"></path>
+                        </svg>
+                        <blockquote id="quote-text" class="quote-text">Loading...</blockquote>
+                        <cite id="quote-author" class="quote-author">—</cite>
+                    </div>
+                    <div class="quote-actions">
+                        <button id="refresh-quote" class="quote-action-btn" title="New quote">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="1 4 1 10 7 10"></polyline>
+                                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                            </svg>
+                        </button>
+                        <button id="copy-quote" class="quote-action-btn" title="Copy quote">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Weather Section -->
         <section id="weather-section">
             <div id="weather-widget" class="glass-container hidden">
@@ -330,6 +363,32 @@
 
                 <div class="settings-section">
                     <h3>Widgets</h3>
+                    <div class="setting-item">
+                        <div class="setting-row">
+                            <div class="setting-label">
+                                <label for="quotes-toggle">Show Inspirational Quotes</label>
+                                <p class="setting-description">Display daily motivational quotes from famous authors</p>
+                            </div>
+                            <div class="setting-control">
+                                <input type="checkbox" id="quotes-toggle">
+                                <label for="quotes-toggle" class="toggle-switch"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="setting-item full-width hidden" id="quote-category-item">
+                        <label for="quote-category">Quote Category</label>
+                        <select id="quote-category">
+                            <option value="all">All Topics</option>
+                            <option value="motivational">Motivational</option>
+                            <option value="wisdom">Wisdom</option>
+                            <option value="success">Success</option>
+                            <option value="life">Life</option>
+                            <option value="happiness">Happiness</option>
+                            <option value="friendship">Friendship</option>
+                            <option value="love">Love</option>
+                        </select>
+                        <small>Choose what type of quotes inspire you most</small>
+                    </div>
                     <div class="setting-item">
                         <div class="setting-row">
                             <div class="setting-label">
@@ -647,6 +706,7 @@
     <script src="js/links.js?v=6.2"></script>
     <script src="js/todo.js?v=6.2"></script>
     <script src="js/focusTimer.js?v=6.2"></script>
+    <script src="js/quotes.js?v=6.2"></script>
     <script src="js/keyboard.js?v=6.2"></script>
     <script src="js/settings.js?v=6.2"></script>
     <script src="js/i18n.js?v=6.2"></script>

@@ -57,6 +57,9 @@ class SowestartApp {
         focusTimerManager.init();
         focusTimerManager.requestNotificationPermission();
 
+        // Initialize quotes
+        quotesManager.init();
+
         // Initialize keyboard shortcuts
         keyboardManager.init();
 

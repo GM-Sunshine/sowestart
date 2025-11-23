@@ -60,6 +60,12 @@ const storage = {
         focusTimerSessions: 0,
         focusTimerDate: null,
 
+        // Quotes
+        quotesEnabled: false,
+        quoteCategory: 'all',
+        currentQuote: null,
+        quoteDate: null,
+
         // Custom
         customCSS: ''
     },

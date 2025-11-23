@@ -13,7 +13,8 @@
     "https://api.artic.edu/*",
     "https://www.artic.edu/*",
     "https://api.open-meteo.com/*",
-    "https://ipwho.is/*"
+    "https://ipwho.is/*",
+    "https://api.quotable.io/*"
   ],
   "chrome_url_overrides": {
     "newtab": "index.html"

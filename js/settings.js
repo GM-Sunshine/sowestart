@@ -227,6 +227,24 @@ const settingsManager = {
             });
         }
 
+        // Quotes widget settings
+        const quotesToggle = document.getElementById('quotes-toggle');
+        if (quotesToggle) {
+            quotesToggle.addEventListener('change', (e) => {
+                storage.set('quotesEnabled', e.target.checked);
+                quotesManager.updateVisibility();
+                this.toggleQuoteCategory(e.target.checked);
+            });
+        }
+
+        const quoteCategory = document.getElementById('quote-category');
+        if (quoteCategory) {
+            quoteCategory.addEventListener('change', (e) => {
+                storage.set('quoteCategory', e.target.value);
+                quotesManager.loadQuote(true);
+            });
+        }
+
         // Focus timer settings
         const focusTimerToggle = document.getElementById('focus-timer-toggle');
         if (focusTimerToggle) {
@@ -367,6 +385,11 @@ const settingsManager = {
         document.getElementById('show-seconds-toggle').checked = settings.showSeconds || false;
         document.getElementById('24hour-toggle').checked = settings.use24Hour || false;
 
+        // Quotes
+        document.getElementById('quotes-toggle').checked = settings.quotesEnabled || false;
+        document.getElementById('quote-category').value = settings.quoteCategory || 'all';
+        this.toggleQuoteCategory(settings.quotesEnabled || false);
+
         // Focus timer
         document.getElementById('focus-timer-toggle').checked = settings.focusTimerEnabled || false;
 
@@ -440,6 +463,15 @@ const settingsManager = {
             customItem.classList.remove('hidden');
         } else {
             customItem.classList.add('hidden');
+        }
+    },
+
+    toggleQuoteCategory(enabled) {
+        const categoryItem = document.getElementById('quote-category-item');
+        if (enabled) {
+            categoryItem.classList.remove('hidden');
+        } else {
+            categoryItem.classList.add('hidden');
         }
     },
 
