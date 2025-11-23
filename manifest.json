@@ -8,8 +8,12 @@
     "bookmarks"
   ],
   "host_permissions": [
-    "https://*/*",
-    "http://*/*"
+    "https://www.sourcesplash.com/*",
+    "https://picsum.photos/*",
+    "https://api.artic.edu/*",
+    "https://www.artic.edu/*",
+    "https://api.open-meteo.com/*",
+    "https://ipwho.is/*"
   ],
   "chrome_url_overrides": {
     "newtab": "index.html"

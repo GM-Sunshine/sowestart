@@ -10,7 +10,7 @@ A beautiful new tab page with liquid glass design, quick links, weather, and cus
 - 🌅 **Liquid Glass Design** - Modern glassmorphism UI with smooth animations
 - 🔗 **Quick Links** - Add your favorite sites with automatic favicons
 - 🌤️ **Weather Widget** - Real-time weather with auto-location
-- 🎨 **Custom Backgrounds** - Picsum Photos, Art Institute of Chicago, or your own images
+- 🎨 **Custom Backgrounds** - Sourcesplash, Picsum Photos, Art Institute of Chicago, or your own images
 - ⏰ **Clock** - Digital or analog with 12/24 hour format
 - 🔍 **Quick Search** - Search with multiple engines (Google, DuckDuckGo, etc.)
 - 📚 **Bookmark Import** - Import directly from Chrome or upload HTML file
@@ -41,6 +41,7 @@ Simply open `index.html` in your browser to preview the demo version.
 
 ## APIs Used
 
+- **Sourcesplash** - Free images from Pexels, Pixabay, and Unsplash
 - **Picsum Photos** - Random photos
 - **Art Institute of Chicago** - Artwork images
 - **Open-Meteo** - Weather data

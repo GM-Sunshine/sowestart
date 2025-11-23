@@ -18,6 +18,9 @@ const backgroundManager = {
             case 'picsum':
                 await this.loadPicsumBackground();
                 break;
+            case 'sourcesplash':
+                await this.loadSourcesplashBackground();
+                break;
             case 'artinstitute':
                 await this.loadArtInstituteBackground();
                 break;
@@ -73,6 +76,39 @@ const backgroundManager = {
             }
         } catch (error) {
             console.error('Failed to load Picsum background:', error);
+            this.loadFallbackBackground();
+        }
+    },
+
+    async loadSourcesplashBackground() {
+        const cached = storage.get('currentBackground');
+        const today = new Date().toDateString();
+
+        if (cached && cached.date === today && cached.url && cached.type === 'sourcesplash') {
+            this.setBackground(cached.url);
+            return;
+        }
+
+        try {
+            const width = Math.min(window.screen.width * window.devicePixelRatio, 2560);
+            const height = Math.min(window.screen.height * window.devicePixelRatio, 1440);
+            const query = storage.get('sourcesplashSearch') || '';
+
+            // Build Sourcesplash URL
+            let imageUrl = `https://www.sourcesplash.com/i/random?w=${width}&h=${height}`;
+
+            if (query && query.trim()) {
+                imageUrl += `&q=${encodeURIComponent(query.trim())}`;
+            }
+
+            // Add a cache buster for daily refresh
+            const seed = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+            imageUrl += `&seed=${seed}`;
+
+            this.setBackground(imageUrl);
+            storage.set('currentBackground', { url: imageUrl, date: today, type: 'sourcesplash' });
+        } catch (error) {
+            console.error('Failed to load Sourcesplash background:', error);
             this.loadFallbackBackground();
         }
     },

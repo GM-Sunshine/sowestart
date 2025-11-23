@@ -156,6 +156,16 @@ const settingsManager = {
             }, 1000));
         }
 
+        const sourcesplashSearch = document.getElementById('sourcesplash-search');
+        if (sourcesplashSearch) {
+            sourcesplashSearch.addEventListener('input', utils.debounce((e) => {
+                storage.set('sourcesplashSearch', e.target.value);
+                if (storage.get('backgroundType') === 'sourcesplash') {
+                    backgroundManager.init();
+                }
+            }, 1000));
+        }
+
         const customBgUrl = document.getElementById('custom-bg-url');
         if (customBgUrl) {
             customBgUrl.addEventListener('input', utils.debounce((e) => {
@@ -309,8 +319,10 @@ const settingsManager = {
         document.getElementById('background-type').value = settings.backgroundType || 'picsum';
         const customBgUrl = document.getElementById('custom-bg-url');
         const bgColor = document.getElementById('bg-color');
+        const sourcesplashSearch = document.getElementById('sourcesplash-search');
         if (customBgUrl) customBgUrl.value = settings.customBackgroundUrl || '';
         if (bgColor) bgColor.value = settings.backgroundColor || '#1a1a1a';
+        if (sourcesplashSearch) sourcesplashSearch.value = settings.sourcesplashSearch || '';
         this.toggleBackgroundOptions(settings.backgroundType || 'picsum');
 
         // Clock
@@ -349,6 +361,7 @@ const settingsManager = {
     toggleBackgroundOptions(type) {
         const picsumItem = document.getElementById('picsum-item');
         const pexelsItem = document.getElementById('pexels-item');
+        const sourcesplashItem = document.getElementById('sourcesplash-item');
         const artItem = document.getElementById('artinstitute-item');
         const customItem = document.getElementById('custom-bg-item');
         const colorItem = document.getElementById('bg-color-item');
@@ -356,6 +369,7 @@ const settingsManager = {
         // Hide all
         picsumItem?.classList.add('hidden');
         pexelsItem?.classList.add('hidden');
+        sourcesplashItem?.classList.add('hidden');
         artItem?.classList.add('hidden');
         customItem?.classList.add('hidden');
         colorItem?.classList.add('hidden');
@@ -365,6 +379,8 @@ const settingsManager = {
             picsumItem?.classList.remove('hidden');
         } else if (type === 'pexels') {
             pexelsItem?.classList.remove('hidden');
+        } else if (type === 'sourcesplash') {
+            sourcesplashItem?.classList.remove('hidden');
         } else if (type === 'artinstitute') {
             artItem?.classList.remove('hidden');
         } else if (type === 'custom') {
