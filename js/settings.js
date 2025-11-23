@@ -703,15 +703,34 @@ const settingsManager = {
 
         if (!url || url.trim() === '') return;
 
-        if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('webcal://')) {
+        // Validate URL format
+        const urlTrimmed = url.trim();
+        if (!urlTrimmed.startsWith('http://') && !urlTrimmed.startsWith('https://') && !urlTrimmed.startsWith('webcal://')) {
             alert('Please enter a valid URL starting with http://, https://, or webcal://');
             return;
         }
 
-        // Convert webcal:// to https://
-        const normalizedUrl = url.replace(/^webcal:\/\//i, 'https://');
+        // Check if URL looks like a calendar feed
+        const isLikelyCalendarFeed = urlTrimmed.includes('.ics') ||
+                                      urlTrimmed.includes('calendar') ||
+                                      urlTrimmed.includes('ical') ||
+                                      urlTrimmed.includes('webcal');
 
+        if (!isLikelyCalendarFeed) {
+            const proceed = confirm('This URL doesn\'t look like a calendar feed (should contain .ics or "calendar"). Add it anyway?');
+            if (!proceed) return;
+        }
+
+        // Convert webcal:// to https://
+        const normalizedUrl = urlTrimmed.replace(/^webcal:\/\//i, 'https://');
+
+        // Check for duplicates
         const feeds = storage.get('calendarFeeds') || [];
+        if (feeds.some(f => f.url === normalizedUrl)) {
+            alert('This calendar feed is already added!');
+            return;
+        }
+
         feeds.push({
             name: name.trim(),
             url: normalizedUrl

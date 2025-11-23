@@ -255,7 +255,7 @@
             </div>
 
             <!-- Calendar Widget -->
-            <div id="calendar-widget" class="glass-container widget hidden">
+            <div id="calendar-widget" class="glass-container widget hidden" role="region" aria-label="Calendar widget">
                 <div class="glass-filter"></div>
                 <div class="glass-overlay"></div>
                 <div class="glass-specular"></div>
@@ -263,14 +263,14 @@
                     <div class="widget-header">
                         <h3>📅 Calendar</h3>
                         <div class="calendar-header-actions">
-                            <button id="refresh-calendar" class="icon-button-small" title="Refresh calendar">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <button id="refresh-calendar" class="icon-button-small" title="Refresh calendar" aria-label="Refresh calendar events">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                     <polyline points="1 4 1 10 7 10"></polyline>
                                     <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
                                 </svg>
                             </button>
-                            <button id="toggle-calendar-widget" class="icon-button-small" title="Toggle calendar">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <button id="toggle-calendar-widget" class="icon-button-small" title="Toggle calendar" aria-label="Toggle calendar visibility" aria-expanded="true">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                     <polyline points="6 9 12 15 18 9"></polyline>
                                 </svg>
                             </button>
@@ -278,26 +278,26 @@
                     </div>
                     <div id="calendar-container" class="calendar-container">
                         <div id="calendar-today" class="calendar-today hidden">
-                            <div class="today-header">Today</div>
-                            <div id="calendar-today-events" class="calendar-events-list">
+                            <div class="today-header" role="heading" aria-level="4">Today</div>
+                            <div id="calendar-today-events" class="calendar-events-list" role="list" aria-label="Today's events">
                                 <!-- Today's events will be rendered here -->
                             </div>
                         </div>
                         <div class="calendar-upcoming">
-                            <div class="upcoming-header">Upcoming</div>
-                            <div id="calendar-upcoming-events" class="calendar-events-list">
+                            <div class="upcoming-header" role="heading" aria-level="4">Upcoming</div>
+                            <div id="calendar-upcoming-events" class="calendar-events-list" role="list" aria-label="Upcoming events">
                                 <!-- Upcoming events will be rendered here -->
                             </div>
                         </div>
                         <div id="calendar-empty" class="calendar-empty hidden">
-                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                                 <line x1="16" y1="2" x2="16" y2="6"></line>
                                 <line x1="8" y1="2" x2="8" y2="6"></line>
                                 <line x1="3" y1="10" x2="21" y2="10"></line>
                             </svg>
                             <p>No calendar feeds configured</p>
-                            <button id="add-calendar-feed-btn" class="btn-primary">Add Calendar</button>
+                            <button id="add-calendar-feed-btn" class="btn-primary" aria-label="Add calendar feed">Add Calendar</button>
                         </div>
                     </div>
                 </div>

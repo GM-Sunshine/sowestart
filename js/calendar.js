@@ -4,12 +4,15 @@ const calendarManager = {
     feeds: [],
     events: [],
     isLoading: false,
+    cache: {},
+    cacheExpiry: 10 * 60 * 1000, // 10 minutes
+    failedFeeds: [],
 
     init() {
         this.loadFeeds();
         this.attachEventListeners();
         this.updateVisibility();
-        this.loadEvents();
+        this.loadEventsWithCache();
     },
 
     loadFeeds() {
@@ -47,6 +50,43 @@ const calendarManager = {
         }
     },
 
+    async loadEventsWithCache() {
+        // Check if we have cached events
+        const cached = this.getCachedEvents();
+        if (cached) {
+            this.events = cached;
+            this.renderEvents();
+            return;
+        }
+
+        // Load fresh events
+        await this.loadEvents();
+    },
+
+    getCachedEvents() {
+        const cacheKey = this.getCacheKey();
+        const cached = this.cache[cacheKey];
+
+        if (cached && Date.now() - cached.timestamp < this.cacheExpiry) {
+            return cached.events;
+        }
+
+        return null;
+    },
+
+    setCachedEvents(events) {
+        const cacheKey = this.getCacheKey();
+        this.cache[cacheKey] = {
+            events: events,
+            timestamp: Date.now()
+        };
+    },
+
+    getCacheKey() {
+        // Create cache key from feed URLs
+        return this.feeds.map(f => f.url).sort().join('|');
+    },
+
     async loadEvents() {
         if (this.feeds.length === 0) {
             this.showEmptyState();
@@ -55,6 +95,7 @@ const calendarManager = {
 
         this.showLoadingState();
         this.events = [];
+        this.failedFeeds = [];
 
         // Fetch all feeds in parallel
         const fetchPromises = this.feeds.map(feed => this.fetchFeed(feed));
@@ -65,6 +106,7 @@ const calendarManager = {
             if (result.status === 'fulfilled' && result.value) {
                 this.events.push(...result.value);
             } else if (result.status === 'rejected') {
+                this.failedFeeds.push(this.feeds[index].name);
                 console.error(`Failed to fetch feed ${this.feeds[index].name}:`, result.reason);
             }
         });
@@ -72,24 +114,51 @@ const calendarManager = {
         // Sort events by date
         this.events.sort((a, b) => a.start - b.start);
 
+        // Cache the events
+        if (this.events.length > 0) {
+            this.setCachedEvents([...this.events]);
+        }
+
         this.renderEvents();
+
+        // Show error toast if any feeds failed
+        if (this.failedFeeds.length > 0 && typeof utils !== 'undefined' && utils.showToast) {
+            const feedNames = this.failedFeeds.join(', ');
+            utils.showToast(`Failed to load: ${feedNames}`, 'error');
+        }
     },
 
     async fetchFeed(feed) {
         try {
-            // Use AllOrigins CORS proxy
+            // Use AllOrigins CORS proxy with timeout
             const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(feed.url)}`;
-            const response = await fetch(proxyUrl);
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+            const response = await fetch(proxyUrl, {
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
 
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
             const icalData = await response.text();
+
+            // Validate that it's actually iCal data
+            if (!icalData.includes('BEGIN:VCALENDAR') && !icalData.includes('BEGIN:VEVENT')) {
+                throw new Error('Invalid iCal format');
+            }
+
             return this.parseICalendar(icalData, feed.name);
         } catch (error) {
+            if (error.name === 'AbortError') {
+                console.error(`Timeout fetching calendar feed ${feed.name}`);
+                throw new Error('Request timeout');
+            }
             console.error(`Error fetching calendar feed ${feed.name}:`, error);
-            return [];
+            throw error;
         }
     },
 
@@ -272,11 +341,22 @@ const calendarManager = {
         ` : '';
 
         const allDayBadge = event.isAllDay ? '<span class="event-all-day">All Day</span>' : '';
+        const ariaLabel = `${event.summary}, ${timeStr}${event.location ? ', ' + event.location : ''}`;
+
+        const eventHandlers = event.url ?
+            `onclick="window.open('${this.escapeHtml(event.url)}', '_blank')"
+             onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.open('${this.escapeHtml(event.url)}','_blank')}"
+             tabindex="0"
+             role="button"
+             style="cursor: pointer;"` : '';
 
         return `
-            <div class="calendar-event" ${event.url ? `onclick="window.open('${this.escapeHtml(event.url)}', '_blank')"` : ''}>
+            <div class="calendar-event"
+                 role="listitem"
+                 aria-label="${this.escapeHtml(ariaLabel)}"
+                 ${eventHandlers}>
                 <div class="event-time">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <circle cx="12" cy="12" r="10"></circle>
                         <polyline points="12 6 12 12 16 14"></polyline>
                     </svg>
@@ -349,9 +429,11 @@ const calendarManager = {
 
         if (isCollapsed) {
             button.style.transform = 'rotate(-90deg)';
+            button.setAttribute('aria-expanded', 'false');
             storage.set('calendarCollapsed', true);
         } else {
             button.style.transform = 'rotate(0deg)';
+            button.setAttribute('aria-expanded', 'true');
             storage.set('calendarCollapsed', false);
         }
     },

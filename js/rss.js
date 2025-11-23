@@ -4,6 +4,8 @@ const rssManager = {
     feeds: [],
     articles: [],
     maxArticles: 10, // Max articles to display per feed
+    cache: {},
+    cacheExpiry: 15 * 60 * 1000, // 15 minutes
 
     // Use rss2json.com free tier or allorigins.win for CORS proxy
     corsProxy: 'https://api.allorigins.win/raw?url=',
@@ -40,7 +42,7 @@ const rssManager = {
 
     loadFeeds() {
         this.feeds = storage.get('rssFeeds') || this.getDefaultFeeds();
-        this.refreshFeeds();
+        this.refreshFeedsWithCache();
     },
 
     getDefaultFeeds() {
@@ -51,7 +53,44 @@ const rssManager = {
         ];
     },
 
-    async refreshFeeds() {
+    async refreshFeedsWithCache() {
+        // Check if we have cached articles
+        const cached = this.getCachedArticles();
+        if (cached) {
+            this.articles = cached;
+            this.renderArticles();
+            return;
+        }
+
+        // Load fresh articles
+        await this.refreshFeeds(false);
+    },
+
+    getCachedArticles() {
+        const cacheKey = this.getCacheKey();
+        const cached = this.cache[cacheKey];
+
+        if (cached && Date.now() - cached.timestamp < this.cacheExpiry) {
+            return cached.articles;
+        }
+
+        return null;
+    },
+
+    setCachedArticles(articles) {
+        const cacheKey = this.getCacheKey();
+        this.cache[cacheKey] = {
+            articles: articles,
+            timestamp: Date.now()
+        };
+    },
+
+    getCacheKey() {
+        // Create cache key from feed URLs
+        return this.feeds.map(f => f.url).sort().join('|');
+    },
+
+    async refreshFeeds(force = true) {
         if (!this.feeds || this.feeds.length === 0) {
             this.showEmptyState();
             return;
@@ -82,6 +121,11 @@ const rssManager = {
 
         // Sort by date (newest first)
         this.articles.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+
+        // Cache the articles
+        if (this.articles.length > 0) {
+            this.setCachedArticles([...this.articles]);
+        }
 
         // Limit total articles
         this.articles = this.articles.slice(0, 20);
