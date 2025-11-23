@@ -251,6 +251,63 @@ const settingsManager = {
             focusTimerToggle.addEventListener('change', (e) => {
                 storage.set('focusTimerEnabled', e.target.checked);
                 focusTimerManager.updateVisibility();
+                this.toggleFocusTimerSettings(e.target.checked);
+            });
+        }
+
+        const timerFocusDuration = document.getElementById('timer-focus-duration');
+        const timerShortBreakDuration = document.getElementById('timer-short-break-duration');
+        const timerLongBreakDuration = document.getElementById('timer-long-break-duration');
+
+        if (timerFocusDuration) {
+            timerFocusDuration.addEventListener('change', (e) => {
+                const durations = storage.get('focusTimerCustomDurations') || {};
+                durations.focus = parseInt(e.target.value) || 25;
+                storage.set('focusTimerCustomDurations', durations);
+                focusTimerManager.loadDurations();
+            });
+        }
+
+        if (timerShortBreakDuration) {
+            timerShortBreakDuration.addEventListener('change', (e) => {
+                const durations = storage.get('focusTimerCustomDurations') || {};
+                durations.shortBreak = parseInt(e.target.value) || 5;
+                storage.set('focusTimerCustomDurations', durations);
+                focusTimerManager.loadDurations();
+            });
+        }
+
+        if (timerLongBreakDuration) {
+            timerLongBreakDuration.addEventListener('change', (e) => {
+                const durations = storage.get('focusTimerCustomDurations') || {};
+                durations.longBreak = parseInt(e.target.value) || 15;
+                storage.set('focusTimerCustomDurations', durations);
+                focusTimerManager.loadDurations();
+            });
+        }
+
+        const timerSound = document.getElementById('timer-sound');
+        if (timerSound) {
+            timerSound.addEventListener('change', (e) => {
+                storage.set('focusTimerSound', e.target.value);
+                // Play preview
+                if (e.target.value !== 'none') {
+                    focusTimerManager.playSound(e.target.value);
+                }
+            });
+        }
+
+        const timerAutoStart = document.getElementById('timer-auto-start');
+        if (timerAutoStart) {
+            timerAutoStart.addEventListener('change', (e) => {
+                storage.set('focusTimerAutoStart', e.target.checked);
+            });
+        }
+
+        const timerBreakActivities = document.getElementById('timer-break-activities');
+        if (timerBreakActivities) {
+            timerBreakActivities.addEventListener('change', (e) => {
+                storage.set('focusTimerBreakActivities', e.target.checked);
             });
         }
 
@@ -401,6 +458,14 @@ const settingsManager = {
 
         // Focus timer
         document.getElementById('focus-timer-toggle').checked = settings.focusTimerEnabled || false;
+        const customDurations = settings.focusTimerCustomDurations || { focus: 25, shortBreak: 5, longBreak: 15 };
+        document.getElementById('timer-focus-duration').value = customDurations.focus || 25;
+        document.getElementById('timer-short-break-duration').value = customDurations.shortBreak || 5;
+        document.getElementById('timer-long-break-duration').value = customDurations.longBreak || 15;
+        document.getElementById('timer-sound').value = settings.focusTimerSound || 'bell';
+        document.getElementById('timer-auto-start').checked = settings.focusTimerAutoStart || false;
+        document.getElementById('timer-break-activities').checked = settings.focusTimerBreakActivities !== false;
+        this.toggleFocusTimerSettings(settings.focusTimerEnabled || false);
 
         // Todo widget
         document.getElementById('todo-widget-toggle').checked = settings.todoWidgetEnabled || false;
@@ -484,6 +549,15 @@ const settingsManager = {
             categoryItem.classList.remove('hidden');
         } else {
             categoryItem.classList.add('hidden');
+        }
+    },
+
+    toggleFocusTimerSettings(enabled) {
+        const settingsItem = document.getElementById('focus-timer-settings');
+        if (enabled) {
+            settingsItem.classList.remove('hidden');
+        } else {
+            settingsItem.classList.add('hidden');
         }
     },
 

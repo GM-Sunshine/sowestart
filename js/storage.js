@@ -59,6 +59,15 @@ const storage = {
         focusTimerCollapsed: false,
         focusTimerSessions: 0,
         focusTimerDate: null,
+        focusTimerCustomDurations: {
+            focus: 25,
+            shortBreak: 5,
+            longBreak: 15
+        },
+        focusTimerSound: 'bell',
+        focusTimerAutoStart: false,
+        focusTimerHistory: [], // Array of {date, sessions, totalMinutes}
+        focusTimerBreakActivities: true,
 
         // Quotes
         quotesEnabled: false,

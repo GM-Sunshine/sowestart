@@ -18,9 +18,24 @@ const focusTimerManager = {
 
     init() {
         this.loadState();
+        this.loadDurations();
         this.attachEventListeners();
         this.updateVisibility();
         this.updateDisplay();
+        this.updateModeLabel();
+        this.renderWeeklyGraph();
+    },
+
+    loadDurations() {
+        const customDurations = storage.get('focusTimerCustomDurations');
+        if (customDurations) {
+            this.durations = { ...this.durations, ...customDurations };
+        }
+        // Update time remaining if not running
+        if (!this.isRunning) {
+            this.timeRemaining = this.durations[this.currentMode] * 60;
+            this.updateDisplay();
+        }
     },
 
     attachEventListeners() {
@@ -137,10 +152,24 @@ const focusTimerManager = {
             this.sessionsCompleted++;
             storage.set('focusTimerSessions', this.sessionsCompleted);
             this.updateSessionsDisplay();
+
+            // Track history
+            this.trackHistory();
+
+            // Show break activity suggestion
+            this.showBreakSuggestion();
         }
 
         // Switch mode
         this.switchMode();
+
+        // Auto-start next session if enabled
+        const autoStart = storage.get('focusTimerAutoStart');
+        if (autoStart) {
+            setTimeout(() => {
+                this.start();
+            }, 3000); // 3 second delay
+        }
     },
 
     switchMode() {
@@ -194,6 +223,61 @@ const focusTimerManager = {
         if (sessionsEl) {
             sessionsEl.textContent = this.sessionsCompleted;
         }
+
+        // Update weekly total
+        const history = storage.get('focusTimerHistory') || [];
+        const weekTotal = history.reduce((sum, entry) => sum + entry.sessions, 0);
+        const weekTotalEl = document.getElementById('timer-week-total');
+        if (weekTotalEl) {
+            weekTotalEl.textContent = weekTotal;
+        }
+
+        // Update graph
+        this.renderWeeklyGraph();
+    },
+
+    renderWeeklyGraph() {
+        const graphContainer = document.getElementById('timer-graph-bars');
+        if (!graphContainer) return;
+
+        const history = storage.get('focusTimerHistory') || [];
+        const today = new Date();
+
+        // Generate last 7 days
+        const days = [];
+        for (let i = 6; i >= 0; i--) {
+            const date = new Date(today);
+            date.setDate(date.getDate() - i);
+            days.push(date);
+        }
+
+        // Find max sessions for scaling
+        const maxSessions = Math.max(...days.map(day => {
+            const dateString = day.toDateString();
+            const entry = history.find(h => h.date === dateString);
+            return entry ? entry.sessions : 0;
+        }), 1);
+
+        // Render bars
+        graphContainer.innerHTML = days.map(day => {
+            const dateString = day.toDateString();
+            const entry = history.find(h => h.date === dateString);
+            const sessions = entry ? entry.sessions : 0;
+            const height = (sessions / maxSessions) * 100;
+
+            const dayLabel = day.toLocaleDateString('en-US', { weekday: 'short' });
+
+            return `
+                <div class="graph-bar">
+                    <div class="bar-container">
+                        <div class="bar-fill" style="height: ${height}%;">
+                            <span class="bar-value">${sessions} session${sessions !== 1 ? 's' : ''}</span>
+                        </div>
+                    </div>
+                    <div class="bar-label">${dayLabel}</div>
+                </div>
+            `;
+        }).join('');
     },
 
     notify() {
@@ -206,25 +290,119 @@ const focusTimerManager = {
             });
         }
 
-        // Play a subtle sound using Web Audio API
+        // Play selected sound
+        const soundType = storage.get('focusTimerSound') || 'bell';
+        if (soundType !== 'none') {
+            this.playSound(soundType);
+        }
+    },
+
+    playSound(soundType) {
+        const sounds = {
+            bell: { freq: 800, type: 'sine', duration: 0.5 },
+            chime: { freq: [523, 659, 784], type: 'sine', duration: 0.3 },
+            gong: { freq: 200, type: 'triangle', duration: 1.5 },
+            ping: { freq: 1000, type: 'square', duration: 0.15 }
+        };
+
+        const sound = sounds[soundType];
+        if (!sound) return;
+
         try {
             const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
 
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
+            if (Array.isArray(sound.freq)) {
+                // Play multiple tones (chime)
+                sound.freq.forEach((freq, index) => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
 
-            oscillator.frequency.value = 800;
-            oscillator.type = 'sine';
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
 
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                    oscillator.frequency.value = freq;
+                    oscillator.type = sound.type;
 
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.5);
+                    const startTime = audioContext.currentTime + (index * 0.2);
+                    gainNode.gain.setValueAtTime(0.2, startTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + sound.duration);
+
+                    oscillator.start(startTime);
+                    oscillator.stop(startTime + sound.duration);
+                });
+            } else {
+                // Play single tone
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+
+                oscillator.frequency.value = sound.freq;
+                oscillator.type = sound.type;
+
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + sound.duration);
+
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + sound.duration);
+            }
         } catch (e) {
             console.warn('Could not play notification sound:', e);
+        }
+    },
+
+    trackHistory() {
+        const history = storage.get('focusTimerHistory') || [];
+        const today = new Date().toDateString();
+
+        // Find today's entry
+        let todayEntry = history.find(entry => entry.date === today);
+
+        if (todayEntry) {
+            todayEntry.sessions++;
+            todayEntry.totalMinutes += this.durations.focus;
+        } else {
+            history.push({
+                date: today,
+                sessions: 1,
+                totalMinutes: this.durations.focus
+            });
+        }
+
+        // Keep only last 7 days
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+        const filtered = history.filter(entry => {
+            const entryDate = new Date(entry.date);
+            return entryDate >= sevenDaysAgo;
+        });
+
+        storage.set('focusTimerHistory', filtered);
+    },
+
+    showBreakSuggestion() {
+        const showSuggestions = storage.get('focusTimerBreakActivities');
+        if (!showSuggestions) return;
+
+        const suggestions = [
+            '🚶 Take a short walk',
+            '💧 Drink some water',
+            '👀 Look away from screen (20-20-20 rule)',
+            '🧘 Do some stretches',
+            '🌬️ Take deep breaths',
+            '🪟 Step outside for fresh air',
+            '☕ Make a cup of tea/coffee',
+            '📱 Check your messages',
+            '🎵 Listen to a song',
+            '🧹 Tidy your workspace'
+        ];
+
+        const randomSuggestion = suggestions[Math.floor(Math.random() * suggestions.length)];
+
+        if (typeof utils !== 'undefined' && utils.showToast) {
+            utils.showToast(`Break time! ${randomSuggestion}`, 'info', 5000);
         }
     },
 
