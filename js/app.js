@@ -63,6 +63,9 @@ class SowestartApp {
         // Initialize RSS feed
         rssManager.init();
 
+        // Initialize calendar
+        calendarManager.init();
+
         // Initialize command palette
         commandPaletteManager.init();
 

@@ -329,6 +329,27 @@ const settingsManager = {
             });
         }
 
+        // Calendar widget settings
+        const calendarWidgetToggle = document.getElementById('calendar-widget-toggle');
+        if (calendarWidgetToggle) {
+            calendarWidgetToggle.addEventListener('change', (e) => {
+                const isEnabled = e.target.checked;
+                storage.set('calendarEnabled', isEnabled);
+                this.toggleCalendarSettings(isEnabled);
+                if (typeof calendarManager !== 'undefined') {
+                    calendarManager.updateVisibility();
+                }
+            });
+        }
+
+        // Calendar feed management
+        const addCalendarFeedBtn = document.getElementById('add-calendar-feed');
+        if (addCalendarFeedBtn) {
+            addCalendarFeedBtn.addEventListener('click', () => {
+                this.addCalendarFeed();
+            });
+        }
+
         // Weather settings
         const weatherToggle = document.getElementById('weather-toggle');
         if (weatherToggle) {
@@ -472,6 +493,10 @@ const settingsManager = {
 
         // RSS widget
         document.getElementById('rss-widget-toggle').checked = settings.rssEnabled || false;
+
+        // Calendar widget
+        document.getElementById('calendar-widget-toggle').checked = settings.calendarEnabled || false;
+        this.toggleCalendarSettings(settings.calendarEnabled || false);
 
         // Weather
         document.getElementById('weather-toggle').checked = settings.weatherEnabled || false;
@@ -629,5 +654,104 @@ const settingsManager = {
         }
 
         styleElement.textContent = css;
+    },
+
+    toggleCalendarSettings(enabled) {
+        const settingsItem = document.getElementById('calendar-settings');
+        if (enabled) {
+            settingsItem.classList.remove('hidden');
+            this.renderCalendarFeeds();
+        } else {
+            settingsItem.classList.add('hidden');
+        }
+    },
+
+    renderCalendarFeeds() {
+        const feedsList = document.getElementById('calendar-feeds-list');
+        if (!feedsList) return;
+
+        const feeds = storage.get('calendarFeeds') || [];
+
+        if (feeds.length === 0) {
+            feedsList.innerHTML = '<p style="color: var(--text-tertiary); font-size: 0.875rem; margin: 0.5rem 0;">No calendar feeds added yet</p>';
+            return;
+        }
+
+        feedsList.innerHTML = feeds.map((feed, index) => `
+            <div class="calendar-feed-item">
+                <div class="calendar-feed-info">
+                    <div class="calendar-feed-name">${this.escapeHtml(feed.name)}</div>
+                    <div class="calendar-feed-url">${this.escapeHtml(feed.url)}</div>
+                </div>
+                <div class="calendar-feed-actions">
+                    <button onclick="settingsManager.removeCalendarFeed(${index})" class="delete-feed" title="Remove feed">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    },
+
+    addCalendarFeed() {
+        const name = prompt('Enter calendar name (e.g., "Work Calendar", "Personal"):');
+        if (!name || name.trim() === '') return;
+
+        const url = prompt('Enter iCal/ICS feed URL:\n\nFor Google Calendar:\n1. Go to calendar settings\n2. Find "Integrate calendar"\n3. Copy the "Secret address in iCal format"\n\nFor Outlook:\n1. Right-click your calendar\n2. Select "Calendar permissions"\n3. Copy the ICS link');
+
+        if (!url || url.trim() === '') return;
+
+        if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('webcal://')) {
+            alert('Please enter a valid URL starting with http://, https://, or webcal://');
+            return;
+        }
+
+        // Convert webcal:// to https://
+        const normalizedUrl = url.replace(/^webcal:\/\//i, 'https://');
+
+        const feeds = storage.get('calendarFeeds') || [];
+        feeds.push({
+            name: name.trim(),
+            url: normalizedUrl
+        });
+
+        storage.set('calendarFeeds', feeds);
+        this.renderCalendarFeeds();
+
+        // Refresh calendar
+        if (typeof calendarManager !== 'undefined') {
+            calendarManager.refreshFeeds();
+        }
+
+        if (typeof utils !== 'undefined' && utils.showToast) {
+            utils.showToast('Calendar feed added successfully!', 'success');
+        }
+    },
+
+    removeCalendarFeed(index) {
+        if (!confirm('Remove this calendar feed?')) return;
+
+        const feeds = storage.get('calendarFeeds') || [];
+        feeds.splice(index, 1);
+        storage.set('calendarFeeds', feeds);
+
+        this.renderCalendarFeeds();
+
+        // Refresh calendar
+        if (typeof calendarManager !== 'undefined') {
+            calendarManager.refreshFeeds();
+        }
+
+        if (typeof utils !== 'undefined' && utils.showToast) {
+            utils.showToast('Calendar feed removed', 'info');
+        }
+    },
+
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 };

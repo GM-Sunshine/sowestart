@@ -253,6 +253,55 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Calendar Widget -->
+            <div id="calendar-widget" class="glass-container widget hidden">
+                <div class="glass-filter"></div>
+                <div class="glass-overlay"></div>
+                <div class="glass-specular"></div>
+                <div class="glass-content">
+                    <div class="widget-header">
+                        <h3>📅 Calendar</h3>
+                        <div class="calendar-header-actions">
+                            <button id="refresh-calendar" class="icon-button-small" title="Refresh calendar">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="1 4 1 10 7 10"></polyline>
+                                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                                </svg>
+                            </button>
+                            <button id="toggle-calendar-widget" class="icon-button-small" title="Toggle calendar">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="calendar-container" class="calendar-container">
+                        <div id="calendar-today" class="calendar-today hidden">
+                            <div class="today-header">Today</div>
+                            <div id="calendar-today-events" class="calendar-events-list">
+                                <!-- Today's events will be rendered here -->
+                            </div>
+                        </div>
+                        <div class="calendar-upcoming">
+                            <div class="upcoming-header">Upcoming</div>
+                            <div id="calendar-upcoming-events" class="calendar-events-list">
+                                <!-- Upcoming events will be rendered here -->
+                            </div>
+                        </div>
+                        <div id="calendar-empty" class="calendar-empty hidden">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                            <p>No calendar feeds configured</p>
+                            <button id="add-calendar-feed-btn" class="btn-primary">Add Calendar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Search Bar -->
@@ -506,6 +555,28 @@
                                 <label for="rss-widget-toggle" class="toggle-switch"></label>
                             </div>
                         </div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-row">
+                            <div class="setting-label">
+                                <label for="calendar-widget-toggle">Show Calendar</label>
+                                <p class="setting-description">Display events from Google Calendar, Outlook, or any iCal feed</p>
+                            </div>
+                            <div class="setting-control">
+                                <input type="checkbox" id="calendar-widget-toggle">
+                                <label for="calendar-widget-toggle" class="toggle-switch"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="setting-item full-width hidden" id="calendar-settings">
+                        <h4 style="margin: 0 0 1rem 0; font-size: 0.875rem; color: var(--text-secondary); font-weight: 600;">Calendar Feeds</h4>
+                        <div id="calendar-feeds-list" style="margin-bottom: 1rem;">
+                            <!-- Calendar feeds will be listed here -->
+                        </div>
+                        <button id="add-calendar-feed" class="btn-secondary" style="width: 100%;">
+                            <span>+ Add Calendar Feed</span>
+                        </button>
+                        <small style="display: block; margin-top: 0.5rem;">Supports Google Calendar, Outlook, Apple Calendar (iCal/ICS URLs)</small>
                     </div>
                 </div>
 
@@ -844,6 +915,7 @@
     <script src="js/focusTimer.js?v=6.2"></script>
     <script src="js/quotes.js?v=6.2"></script>
     <script src="js/rss.js?v=6.2"></script>
+    <script src="js/calendar.js?v=6.2"></script>
     <script src="js/commands.js?v=6.2"></script>
     <script src="js/keyboard.js?v=6.2"></script>
     <script src="js/settings.js?v=6.2"></script>

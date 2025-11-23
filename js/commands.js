@@ -129,6 +129,30 @@ const commandPaletteManager = {
                 }
             },
             {
+                id: 'toggle-calendar',
+                title: 'Toggle Calendar',
+                description: 'Show/hide calendar widget',
+                icon: '📅',
+                category: 'Widgets',
+                action: () => {
+                    const enabled = !storage.get('calendarEnabled');
+                    storage.set('calendarEnabled', enabled);
+                    if (calendarManager) calendarManager.updateVisibility();
+                }
+            },
+            {
+                id: 'refresh-calendar',
+                title: 'Refresh Calendar',
+                description: 'Reload calendar events',
+                icon: '🔄',
+                category: 'Widgets',
+                action: () => {
+                    if (calendarManager) {
+                        calendarManager.loadEvents();
+                    }
+                }
+            },
+            {
                 id: 'refresh-quote',
                 title: 'New Quote',
                 description: 'Load a new inspirational quote',

@@ -11,6 +11,7 @@ A beautiful new tab page with liquid glass design, quick links, weather, and cus
 - 🎯 **Advanced Focus Timer** - Pomodoro timer with custom durations, 4 notification sounds, weekly statistics graph, auto-start, and break activity suggestions
 - 📝 **Quick Notes** - Built-in todo list / notes widget for productivity
 - 📰 **RSS News Feed** - Stay updated with feeds from Hacker News, The Verge, and custom sources
+- 📅 **Calendar Integration** - Connect Google Calendar, Outlook, or any iCal feed - view today's events and upcoming schedule
 - 💬 **Inspirational Quotes** - Daily motivational quotes from famous authors with 8 categories
 - 🚀 **Command Palette** - Quick launcher with fuzzy search (Cmd+P) for sites, settings, timer actions, and widgets - with recent command history
 - 🔗 **Quick Links** - Add your favorite sites with automatic favicons
