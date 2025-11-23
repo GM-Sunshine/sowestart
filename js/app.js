@@ -60,6 +60,9 @@ class SowestartApp {
         // Initialize quotes
         quotesManager.init();
 
+        // Initialize RSS feed
+        rssManager.init();
+
         // Initialize keyboard shortcuts
         keyboardManager.init();
 

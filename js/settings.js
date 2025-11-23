@@ -263,6 +263,15 @@ const settingsManager = {
             });
         }
 
+        // RSS widget settings
+        const rssWidgetToggle = document.getElementById('rss-widget-toggle');
+        if (rssWidgetToggle) {
+            rssWidgetToggle.addEventListener('change', (e) => {
+                storage.set('rssEnabled', e.target.checked);
+                rssManager.updateVisibility();
+            });
+        }
+
         // Weather settings
         const weatherToggle = document.getElementById('weather-toggle');
         if (weatherToggle) {
@@ -395,6 +404,9 @@ const settingsManager = {
 
         // Todo widget
         document.getElementById('todo-widget-toggle').checked = settings.todoWidgetEnabled || false;
+
+        // RSS widget
+        document.getElementById('rss-widget-toggle').checked = settings.rssEnabled || false;
 
         // Weather
         document.getElementById('weather-toggle').checked = settings.weatherEnabled || false;

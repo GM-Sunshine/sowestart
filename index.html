@@ -206,6 +206,43 @@
                     </div>
                 </div>
             </div>
+
+            <!-- RSS Feed Widget -->
+            <div id="rss-widget" class="glass-container widget hidden">
+                <div class="glass-filter"></div>
+                <div class="glass-overlay"></div>
+                <div class="glass-specular"></div>
+                <div class="glass-content">
+                    <div class="widget-header">
+                        <h3>📰 News Feed</h3>
+                        <div class="rss-header-actions">
+                            <button id="refresh-rss" class="icon-button-small" title="Refresh feeds">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="1 4 1 10 7 10"></polyline>
+                                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                                </svg>
+                            </button>
+                            <button id="toggle-rss-widget" class="icon-button-small" title="Toggle feed">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="rss-container" class="rss-container">
+                        <div id="rss-feed-list" class="rss-feed-list"></div>
+                        <div id="rss-empty" class="rss-empty hidden">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 11a9 9 0 0 1 9 9"></path>
+                                <path d="M4 4a16 16 0 0 1 16 16"></path>
+                                <circle cx="5" cy="19" r="1"></circle>
+                            </svg>
+                            <p>No RSS feeds configured</p>
+                            <button id="add-rss-feed-btn" class="btn-primary">Add Feed</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Search Bar -->
@@ -410,6 +447,18 @@
                             <div class="setting-control">
                                 <input type="checkbox" id="todo-widget-toggle">
                                 <label for="todo-widget-toggle" class="toggle-switch"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-row">
+                            <div class="setting-label">
+                                <label for="rss-widget-toggle">Show News Feed</label>
+                                <p class="setting-description">Display RSS feeds from Hacker News, The Verge, and custom sources</p>
+                            </div>
+                            <div class="setting-control">
+                                <input type="checkbox" id="rss-widget-toggle">
+                                <label for="rss-widget-toggle" class="toggle-switch"></label>
                             </div>
                         </div>
                     </div>
@@ -707,6 +756,7 @@
     <script src="js/todo.js?v=6.2"></script>
     <script src="js/focusTimer.js?v=6.2"></script>
     <script src="js/quotes.js?v=6.2"></script>
+    <script src="js/rss.js?v=6.2"></script>
     <script src="js/keyboard.js?v=6.2"></script>
     <script src="js/settings.js?v=6.2"></script>
     <script src="js/i18n.js?v=6.2"></script>

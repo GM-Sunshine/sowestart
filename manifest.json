@@ -14,7 +14,8 @@
     "https://www.artic.edu/*",
     "https://api.open-meteo.com/*",
     "https://ipwho.is/*",
-    "https://api.quotable.io/*"
+    "https://api.quotable.io/*",
+    "https://api.allorigins.win/*"
   ],
   "chrome_url_overrides": {
     "newtab": "index.html"

@@ -10,6 +10,8 @@ A beautiful new tab page with liquid glass design, quick links, weather, and cus
 - 🌅 **Liquid Glass Design** - Modern glassmorphism UI with smooth animations
 - 🎯 **Focus Timer** - Pomodoro timer with work/break cycles and session tracking
 - 📝 **Quick Notes** - Built-in todo list / notes widget for productivity
+- 📰 **RSS News Feed** - Stay updated with feeds from Hacker News, The Verge, and custom sources
+- 💬 **Inspirational Quotes** - Daily motivational quotes from famous authors
 - 🔗 **Quick Links** - Add your favorite sites with automatic favicons
 - 🌤️ **Weather Widget** - Real-time weather with auto-location
 - 🎨 **Custom Backgrounds** - Sourcesplash, Picsum Photos, Art Institute of Chicago, or your own images
@@ -61,6 +63,8 @@ Make your workflow faster with these shortcuts:
 - **Art Institute of Chicago** - Artwork images
 - **Open-Meteo** - Weather data
 - **ipwho.is** - IP-based geolocation
+- **Quotable.io** - Inspirational quotes
+- **AllOrigins** - CORS proxy for RSS feeds
 
 
 ## Credits

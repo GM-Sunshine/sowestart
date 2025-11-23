@@ -66,6 +66,11 @@ const storage = {
         currentQuote: null,
         quoteDate: null,
 
+        // RSS Feed
+        rssEnabled: false,
+        rssFeeds: null, // Will use getDefaultFeeds() from rssManager if null
+        rssWidgetCollapsed: false,
+
         // Custom
         customCSS: ''
     },
