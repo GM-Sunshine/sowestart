@@ -13,12 +13,24 @@ const keyboardManager = {
                 this.focusSearch();
             }
 
-            // Escape: Blur search or close settings
+            // Cmd+P or Ctrl+P: Open command palette
+            if ((e.metaKey || e.ctrlKey) && e.key === 'p') {
+                e.preventDefault();
+                this.openCommandPalette();
+            }
+
+            // Escape: Blur search, close command palette, or close settings
             if (e.key === 'Escape') {
                 const searchInput = document.getElementById('search-input');
                 const settingsModal = document.getElementById('settings-modal');
+                const commandPalette = document.getElementById('command-palette');
 
-                if (searchInput === document.activeElement) {
+                // Check command palette first
+                if (commandPalette && !commandPalette.classList.contains('hidden')) {
+                    if (typeof commandPaletteManager !== 'undefined') {
+                        commandPaletteManager.close();
+                    }
+                } else if (searchInput === document.activeElement) {
                     searchInput.blur();
                 } else if (settingsModal && !settingsModal.classList.contains('hidden')) {
                     settingsModal.classList.add('hidden');
@@ -47,6 +59,12 @@ const keyboardManager = {
 
         if (settingsModal) {
             settingsModal.classList.toggle('hidden');
+        }
+    },
+
+    openCommandPalette() {
+        if (typeof commandPaletteManager !== 'undefined') {
+            commandPaletteManager.open();
         }
     }
 };

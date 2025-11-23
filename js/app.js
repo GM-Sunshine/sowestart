@@ -63,6 +63,9 @@ class SowestartApp {
         // Initialize RSS feed
         rssManager.init();
 
+        // Initialize command palette
+        commandPaletteManager.init();
+
         // Initialize keyboard shortcuts
         keyboardManager.init();
 

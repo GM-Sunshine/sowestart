@@ -80,6 +80,9 @@ const storage = {
         rssFeeds: null, // Will use getDefaultFeeds() from rssManager if null
         rssWidgetCollapsed: false,
 
+        // Command Palette
+        recentCommands: [], // Array of command IDs
+
         // Custom
         customCSS: ''
     },

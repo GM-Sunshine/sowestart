@@ -12,13 +12,14 @@ A beautiful new tab page with liquid glass design, quick links, weather, and cus
 - 📝 **Quick Notes** - Built-in todo list / notes widget for productivity
 - 📰 **RSS News Feed** - Stay updated with feeds from Hacker News, The Verge, and custom sources
 - 💬 **Inspirational Quotes** - Daily motivational quotes from famous authors with 8 categories
+- 🚀 **Command Palette** - Quick launcher with fuzzy search (Cmd+P) for sites, settings, timer actions, and widgets - with recent command history
 - 🔗 **Quick Links** - Add your favorite sites with automatic favicons
 - 🌤️ **Weather Widget** - Real-time weather with auto-location
 - 🎨 **Custom Backgrounds** - Sourcesplash, Picsum Photos, Art Institute of Chicago, or your own images
 - 🎨 **Accent Color Picker** - Customize colors to match your style
 - ⏰ **Clock** - Digital or analog with 12/24 hour format
 - 🔍 **Quick Search** - Search with multiple engines (Google, DuckDuckGo, etc.)
-- ⌨️ **Keyboard Shortcuts** - Cmd/Ctrl+K for search, Cmd/Ctrl+/ for settings, Esc to close
+- ⌨️ **Keyboard Shortcuts** - Cmd/Ctrl+P for command palette, Cmd/Ctrl+K for search, Cmd/Ctrl+/ for settings
 - 📚 **Bookmark Import** - Import directly from Chrome or upload HTML file
 - 🎭 **Themes** - Light, dark, or auto mode
 - 🔄 **Chrome Sync** - Settings sync across devices (when Chrome Sync is enabled)
@@ -51,9 +52,12 @@ Simply open `index.html` in your browser to preview the demo version.
 
 Make your workflow faster with these shortcuts:
 
+- **Cmd/Ctrl + P** - Open command palette (quick launcher)
 - **Cmd/Ctrl + K** - Focus search bar
 - **Cmd/Ctrl + /** - Toggle settings
-- **Escape** - Close settings or unfocus search
+- **Escape** - Close command palette, settings, or unfocus search
+- **↑ / ↓** (in command palette) - Navigate commands
+- **Enter** (in command palette) - Execute selected command
 - **Enter** (in todo input) - Add new note
 
 ## APIs Used
